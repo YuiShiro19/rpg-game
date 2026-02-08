@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -163,7 +163,10 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
 const XP_PER_LEVEL = 60;
 const POTION_HEAL = 20;
 const RESPAWN_BASE_POTIONS = 3;
-const SPRITE_PATH = '../assets/monsters/';
+const SPRITE_PATHS = [
+    '../assets/monsters/',
+    'assets/monsters/'
+];
 
 // ===== PLAYER =====
 let player = {
@@ -314,6 +317,14 @@ const BESTIARY_DESC = {
     'Seigneur des abysses':'Tyran des profondeurs.'
 };
 
+function pickSpriteBase(){
+    const path = location.pathname || '';
+    if(path.includes('/Html%20%26%20Css/') || path.includes('/Html & Css/')){
+        return SPRITE_PATHS[0];
+    }
+    return SPRITE_PATHS[1];
+}
+
 function setMonsterImage(imgId, name){
     const img = document.getElementById(imgId);
     if(!img) return;
@@ -322,7 +333,13 @@ function setMonsterImage(imgId, name){
         img.style.display = 'none';
         return;
     }
-    img.src = SPRITE_PATH + file;
+    const primary = pickSpriteBase() + file;
+    const fallback = (primary.startsWith('../') ? SPRITE_PATHS[1] : SPRITE_PATHS[0]) + file;
+    img.onerror = () => {
+        if(img.src.endsWith(fallback)) return;
+        img.src = fallback;
+    };
+    img.src = primary;
     img.style.display = 'block';
 }
 
