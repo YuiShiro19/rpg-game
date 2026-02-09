@@ -2054,7 +2054,24 @@ function chooseClass(){
     document.getElementById('questBoard').style.display = 'none';
     document.getElementById('game').style.display = 'none';
     document.getElementById('dungeonUI').style.display = 'none';
+    hideMobilePanels();
     setActionsEnabled(false);
+}
+
+function hideMobilePanels(){
+    const mobile = document.getElementById('mobilePanels');
+    if(mobile) mobile.style.display = 'none';
+    const qb = document.getElementById('questBoard');
+    const mb = document.getElementById('mapBoard');
+    if(qb) qb.classList.remove('show');
+    if(mb) mb.classList.remove('show');
+}
+
+function showMobilePanels(){
+    const mobile = document.getElementById('mobilePanels');
+    if(mobile && window.matchMedia('(max-width: 720px)').matches){
+        mobile.style.display = 'flex';
+    }
 }
 
 function chooseDifficulty(){
@@ -2083,6 +2100,7 @@ function chooseDifficulty(){
     document.getElementById('game').style.display = 'none';
     document.getElementById('dungeonUI').style.display = 'none';
     document.getElementById('mapBoard').style.display = 'none';
+    hideMobilePanels();
     setActionsEnabled(false);
 }
 
@@ -2098,6 +2116,7 @@ function setDifficulty(id){
     screen.style.display = 'none';
     screen.innerHTML = '';
     document.getElementById('mapBoard').style.display = '';
+    showMobilePanels();
     chooseClass();
 }
 function renderZoneMap(){
@@ -2195,6 +2214,7 @@ function showStartMenu(){
     document.getElementById('questBoard').style.display = 'none';
     document.getElementById('game').style.display = 'none';
     document.getElementById('dungeonUI').style.display = 'none';
+    hideMobilePanels();
     setActionsEnabled(false);
     requestAnimationFrame(()=>startScreen.classList.add('show'));
 }
