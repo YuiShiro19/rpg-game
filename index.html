@@ -1999,6 +1999,28 @@ function toggleMobilePanel(which){
     map.classList.toggle('show', showMap);
     questBtn.classList.toggle('active', showQuest);
     mapBtn.classList.toggle('active', showMap);
+    if(showQuest || showMap){
+        setMainVisibility(false);
+    } else {
+        setMainVisibility(true);
+    }
+}
+
+function setMainVisibility(show){
+    const game = document.getElementById('game');
+    const dungeonUI = document.getElementById('dungeonUI');
+    if(show){
+        if(inDungeon){
+            if(dungeonUI) dungeonUI.style.display = 'block';
+            if(game) game.style.display = 'none';
+        } else {
+            if(game) game.style.display = 'block';
+            if(dungeonUI) dungeonUI.style.display = 'none';
+        }
+    } else {
+        if(game) game.style.display = 'none';
+        if(dungeonUI) dungeonUI.style.display = 'none';
+    }
 }
 
 // ===== ARENA =====
