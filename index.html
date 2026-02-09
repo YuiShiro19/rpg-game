@@ -12,6 +12,10 @@ body{margin:0;background:radial-gradient(1200px 600px at 15% 10%,rgba(127,0,255,
 #mobilePanels{display:none;width:100%;gap:10px;justify-content:center}
 #mobilePanels button{padding:8px 12px;font-size:14px;border-radius:10px;background:#1a1424;border:1px solid #2b2338;box-shadow:none}
 #mobilePanels button.active{background:linear-gradient(90deg,#00ffd5,#7f00ff);border:none;color:#0b0b12}
+#mobilePanels .panel-btn{border:none;color:#0b0b12}
+#mobilePanels .panel-btn.map{background:linear-gradient(90deg,#7f00ff,#00ffd5)}
+#mobilePanels .panel-btn.quest{background:linear-gradient(90deg,#00ffd5,#5b8dff)}
+#mobilePanels .panel-btn.back{background:#1b1524;color:#f5f2ff;border:1px solid #2e243a}
 #questPanel{padding:20px;background:rgba(12,12,12,0.95);border-radius:16px;box-shadow:0 0 25px #00ffd5}
 #mapPanel{margin-top:12px;padding:20px;background:rgba(18,8,24,0.95);border-radius:16px;box-shadow:0 0 25px #7f00ff}
 #game,#dungeonUI{width:950px;padding:30px;background:rgba(12,12,18,0.95);border-radius:16px;box-shadow:0 0 40px rgba(255,59,127,0.6);margin-bottom:20px;}
@@ -146,8 +150,9 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
 <div id="toast"></div>
 
 <div id="mobilePanels">
-  <button id="btnQuestPanel" onclick="toggleMobilePanel('quest')"><span class="emoji">📜</span> Quêtes</button>
-  <button id="btnMapPanel" onclick="toggleMobilePanel('map')"><span class="emoji">🗺️</span> Carte</button>
+  <button id="btnQuestPanel" class="panel-btn quest" onclick="toggleMobilePanel('quest')"><span class="emoji">📜</span> Quêtes</button>
+  <button id="btnMapPanel" class="panel-btn map" onclick="toggleMobilePanel('map')"><span class="emoji">🗺️</span> Carte</button>
+  <button id="btnBackPanel" class="panel-btn back" style="display:none" onclick="closeMobilePanels()">⬅️ Retour</button>
 </div>
 
 <div id="questBoard">
@@ -2034,6 +2039,7 @@ function toggleMobilePanel(which){
     const map = document.getElementById('mapBoard');
     const questBtn = document.getElementById('btnQuestPanel');
     const mapBtn = document.getElementById('btnMapPanel');
+    const backBtn = document.getElementById('btnBackPanel');
     if(!quest || !map || !questBtn || !mapBtn) return;
     const showQuest = which === 'quest' ? !quest.classList.contains('show') : false;
     const showMap = which === 'map' ? !map.classList.contains('show') : false;
@@ -2048,8 +2054,26 @@ function toggleMobilePanel(which){
             setMainVisibility(true);
         }
     }
+    if(backBtn){
+        backBtn.style.display = (showQuest || showMap) ? 'inline-flex' : 'none';
+    }
 }
 
+function closeMobilePanels(){
+    const quest = document.getElementById('questBoard');
+    const map = document.getElementById('mapBoard');
+    const questBtn = document.getElementById('btnQuestPanel');
+    const mapBtn = document.getElementById('btnMapPanel');
+    const backBtn = document.getElementById('btnBackPanel');
+    if(quest) quest.classList.remove('show');
+    if(map) map.classList.remove('show');
+    if(questBtn) questBtn.classList.remove('active');
+    if(mapBtn) mapBtn.classList.remove('active');
+    if(backBtn) backBtn.style.display = 'none';
+    if(window.matchMedia('(max-width: 720px)').matches){
+        setMainVisibility(true);
+    }
+}
 function setMainVisibility(show){
     const game = document.getElementById('game');
     const dungeonUI = document.getElementById('dungeonUI');
