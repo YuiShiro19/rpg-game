@@ -268,11 +268,11 @@ button.btn-menu{background:linear-gradient(180deg,#1c1630,#120d1a);border:1px so
 <div id="hoverTip"></div>
 
 <div id="mobilePanels">
-  <button id="btnCombatPanel" class="panel-btn back" onclick="closeMobilePanels()">⚔️ Combat</button>
+  <button id="btnCombatPanel" class="panel-btn back" onclick="closeMobilePanels()"><span class="emoji">⚔️</span> Combat</button>
   <button id="btnQuestPanel" class="panel-btn quest" onclick="toggleMobilePanel('quest')"><span class="emoji">📜</span> Quêtes</button>
   <button id="btnMapPanel" class="panel-btn map" onclick="toggleMobilePanel('map')"><span class="emoji">🗺️</span> Carte</button>
-  <button id="btnMenuPanel" class="panel-btn back" onclick="toggleSecondary()">➕ Menu</button>
-  <button id="btnBackPanel" class="panel-btn back" style="display:none" onclick="closeMobilePanels()">⬅️ Retour</button>
+  <button id="btnMenuPanel" class="panel-btn back" onclick="toggleSecondary()"><span class="emoji">➕</span> Menu</button>
+  <button id="btnBackPanel" class="panel-btn back" style="display:none" onclick="closeMobilePanels()"><span class="emoji">⬅️</span> Retour</button>
 </div>
 
 <div id="questBoard">
@@ -2547,9 +2547,10 @@ function buildSecondaryActions(){
     if(!s) return;
     const inVillage = currentZone && currentZone.id === 'village';
     let html = `
-    ${inVillage ? '' : `<div class="action-label">Exploration</div>
-    <button class="btn-combat btn-sm" onclick="fightZoneBoss()">👑 Boss</button>
+    <div class="action-label">Exploration</div>
     <button class="btn-combat btn-sm" onclick="fightWorldBoss()">🌌 Boss mondial</button>
+    ${inVillage ? `<div class="small">Va dans une zone pour les boss de zone, l'arène et les quêtes.</div>` : `
+    <button class="btn-combat btn-sm" onclick="fightZoneBoss()">👑 Boss</button>
     <button class="btn-combat btn-sm" onclick="startArena()">🏟️ Arène</button>
     <button class="btn-util btn-sm" onclick="toggleMenu('quests', renderQuestMenu)">📜 Quêtes</button>`}
     <div class="action-label">Personnage</div>
