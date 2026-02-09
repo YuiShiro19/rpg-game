@@ -2239,6 +2239,9 @@ function selectZone(id){
     enemy = z.safe ? null : initEnemy(player.level);
     updateUI();
     saveGame();
+    if(window.matchMedia('(max-width: 720px)').matches){
+        closeMobilePanels();
+    }
 }
 
 function fightZoneBoss(){
@@ -2283,6 +2286,7 @@ function setClass(i){
     document.getElementById('game').style.display = '';
     classChosen = true;
     setActionsEnabled(true);
+    showMobilePanels();
     updateUI();
     saveGame();
 }
@@ -2375,6 +2379,7 @@ function loadGame(){
         document.getElementById('questBoard').style.display = '';
         document.getElementById('game').style.display = '';
         setActionsEnabled(true);
+        showMobilePanels();
         enemy = currentZone.safe ? null : initEnemy(player.level);
         updateUI();
     } else {
