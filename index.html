@@ -15,6 +15,10 @@ body{margin:0;background:radial-gradient(1200px 600px at 15% 10%,rgba(127,0,255,
 #hud .hud-left{display:flex;gap:8px;flex-wrap:wrap}
 #hud .hud-right{display:flex;gap:8px;flex-wrap:wrap}
 #hud .pill{font-size:12px;padding:4px 8px;border-radius:999px;background:#1a1424;border:1px solid #2b2338;color:#d7cfea}
+#layoutControls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 2px 0}
+#layoutControls .layout-label{font-size:12px;color:#8f8aa0}
+.layout-btn{padding:6px 10px;border-radius:999px;background:#1a1424;border:1px solid #2b2338;color:#d7cfea;font-size:12px;cursor:pointer;box-shadow:none}
+.layout-btn.active{background:linear-gradient(90deg,#00ffd5,#7f00ff);color:#0a0a0f;border:none}
 #zoneMap{display:flex;flex-direction:column;gap:8px;justify-content:center;margin-top:10px}
 #zoneMap .zone{background:#122;border:1px solid #355;border-radius:10px;padding:8px 10px;color:#cfe;cursor:pointer;display:flex;flex-direction:column;gap:4px}
 #zoneMap .zone.active{background:#00ffd5;color:#000;border-color:#00ffd5;animation:pulse 1.6s ease-in-out infinite}
@@ -34,6 +38,7 @@ h1{text-align:center;color:#ff3b7f;font-family:"Cinzel", serif;letter-spacing:1p
 #log,#dungeonLog{height:150px;overflow-y:auto;background:#111;padding:10px;border-radius:10px;box-shadow:0 0 15px #ff3b7f;margin-bottom:10px}
 button{padding:12px 20px;margin:5px;border:none;border-radius:8px;background:#ff3b7f;color:#fff;font-size:16px;cursor:pointer;box-shadow:0 0 10px #ff3b7f;transition:0.2s}
 button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
+button:disabled{opacity:0.55;cursor:not-allowed;transform:none;box-shadow:none}
 .bar-container{width:100%;height:20px;background:#222;border-radius:10px;margin-bottom:8px}
 .bar{height:100%;border-radius:10px;transition:width 0.4s}
 .hp{background:linear-gradient(90deg,#00ff66,#00cc55)}
@@ -103,6 +108,27 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
 .opt-actions{display:flex;justify-content:center;gap:10px;margin-top:16px}
 .opt-btn{padding:10px 16px;border-radius:10px;background:linear-gradient(90deg,#ff3b7f,#b84dff)}
 .opt-btn.secondary{background:#1b1524;color:#f5f2ff;border:1px solid #2e243a;box-shadow:none}
+#villagePanel{display:grid;grid-template-columns:repeat(3,minmax(160px,1fr));gap:10px;margin-top:10px}
+.village-card{background:#12101a;border:1px solid #2b2338;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.village-card h4{margin:0;font-size:14px;color:#ffe7ff}
+.village-card .small{margin:0}
+.village-card .village-btn{width:100%;margin:0}
+
+body.force-compact{flex-direction:column;align-items:stretch;padding:14px;gap:14px}
+body.force-compact #questBoard,body.force-compact #mapBoard{width:100%;position:static}
+body.force-compact #questPanel,body.force-compact #mapPanel{padding:14px}
+body.force-compact #game,body.force-compact #dungeonUI{width:100%;padding:14px}
+body.force-compact #hud{flex-direction:column;align-items:flex-start;gap:6px;padding:6px 8px}
+body.force-compact #hud .pill{font-size:11px;padding:3px 7px}
+body.force-compact #menu{min-height:auto}
+body.force-compact h1{font-size:22px}
+body.force-compact .bar-container{height:16px}
+body.force-compact #log,body.force-compact #dungeonLog{height:110px;font-size:13px}
+body.force-compact button{width:100%}
+body.force-compact #actions,body.force-compact #secondaryActions,body.force-compact #menu,body.force-compact .quest-actions,body.force-compact .quest-sort{justify-content:stretch}
+body.force-compact #actions button,body.force-compact #secondaryActions button{flex:1}
+body.force-compact .monster-img{width:72px;height:72px}
+body.force-compact .bestiary-img{width:52px;height:52px}
 
 @media (max-width: 980px){
   body{flex-direction:column;align-items:stretch;padding:14px}
@@ -110,14 +136,33 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
   #game,#dungeonUI{width:100%;padding:18px}
   #hud{flex-direction:column;align-items:flex-start}
   #menu{min-height:auto}
+  #log,#dungeonLog{height:130px}
+  #villagePanel{grid-template-columns:repeat(2,minmax(160px,1fr))}
+}
+
+@media (max-width: 820px){
+  #questPanel,#mapPanel{padding:16px}
+  #game,#dungeonUI{padding:16px}
+  #hud .pill{font-size:11.5px}
+  #log,#dungeonLog{height:120px}
 }
 
 @media (max-width: 560px){
-  h1{font-size:24px}
+  h1{font-size:22px}
+  body{gap:14px}
+  #questPanel,#mapPanel{padding:14px}
+  #game,#dungeonUI{padding:14px}
+  #hud{gap:6px;padding:6px 8px}
+  #hud .pill{font-size:11px;padding:3px 7px}
+  #stats .list-card,#menu .list-card{padding:6px}
+  .bar-container{height:16px}
+  #log,#dungeonLog{height:110px;font-size:13px}
   button{width:100%}
   #actions,#secondaryActions,#menu,.quest-actions,.quest-sort{justify-content:stretch}
   #actions button,#secondaryActions button{flex:1}
-  .monster-img{width:80px;height:80px}
+  .monster-img{width:72px;height:72px}
+  .bestiary-img{width:52px;height:52px}
+  #villagePanel{grid-template-columns:repeat(2,minmax(140px,1fr))}
 }
 </style>
 </head>
@@ -139,6 +184,11 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
 <h1 id="zoneTitle">Plaine</h1>
 <div id="eventBanner" class="event-banner" style="display:none;"></div>
 <div id="hud"></div>
+<div id="layoutControls">
+  <span class="layout-label">Affichage</span>
+  <button class="layout-btn" data-layout="auto">Auto</button>
+  <button class="layout-btn" data-layout="compact">Compact</button>
+</div>
 <div id="stats"></div>
 <div class="bar-container"><div id="hpBar" class="bar hp"></div></div>
 <div class="bar-container"><div id="xpBar" class="bar xp"></div></div>
@@ -215,6 +265,7 @@ let seasonalEvent = null;
 let dailyQuest = null;
 let weeklyQuest = null;
 const zones = [
+    {id:'village', name:'Village', diff:0, rewardMult:1, reqLevel:1, isTown:true, monsters:[]},
     {id:'plaine', name:'Plaine', diff:1, rewardMult:1, reqLevel:1, monsters:[
         {name:'Gobelin',hp:28,atk:6},
         {name:'Loup',hp:26,atk:8},
@@ -251,7 +302,10 @@ const zones = [
         {name:'Briseur d’âmes',hp:86,atk:28}
     ], boss:{name:'Seigneur des abysses', hp:180, atk:28, lore:'Il dévore les âmes tombées.', artifact:{id:'void-heart', name:'Cœur du Néant', atk:6, hp:20, lifesteal:0.08, desc:'Puissance et vol de vie.'}}}
 ];
-let currentZone = zones[0];
+function getDefaultZone(){
+    return zones.find(z=>z.id==='plaine') || zones[0];
+}
+let currentZone = getDefaultZone();
 
 // ===== UTILS =====
 const MONSTER_SPRITES = {
@@ -357,6 +411,64 @@ function setMonsterImage(imgId, name){
     };
     img.src = primary;
     img.style.display = 'block';
+}
+
+function isTownZone(){
+    return !!(currentZone && currentZone.isTown);
+}
+
+function applyTownState(){
+    const isTown = isTownZone();
+    const actionButtons = document.querySelectorAll('#actions .primary-action');
+    actionButtons.forEach(btn=>{btn.disabled = isTown;});
+    const townOnly = document.querySelectorAll('[data-town="1"]');
+    townOnly.forEach(el=>{
+        el.style.display = isTown ? '' : 'none';
+    });
+    const dungeonBtn = document.querySelector('button[onclick="enterDungeon()"]');
+    if(dungeonBtn) dungeonBtn.style.display = isTown ? 'none' : '';
+}
+
+function refreshZoneState(){
+    if(isTownZone()){
+        enemy = null;
+    } else {
+        enemy = initEnemy(player.level);
+    }
+}
+
+function renderVillage(){
+    const m = document.getElementById('menu');
+    if(!m) return;
+    m.innerHTML = `<h3>🏘️ Village</h3>
+        <div class="small">Zone sûre. Choisis un service :</div>
+        <div id="villagePanel">
+            <div class="village-card">
+                <h4>Commerce</h4>
+                <p class="small">Achats & vente de butin.</p>
+                <button class="village-btn" onclick="renderShop()">🏪 Marchand</button>
+            </div>
+            <div class="village-card">
+                <h4>Forge</h4>
+                <p class="small">Enchantements d’équipement.</p>
+                <button class="village-btn" onclick="renderForge()">⚒️ Forgeron</button>
+            </div>
+            <div class="village-card">
+                <h4>Amélioration</h4>
+                <p class="small">Renforcer ton stuff.</p>
+                <button class="village-btn" onclick="renderUpgrade()">🧬 Amélioration</button>
+            </div>
+            <div class="village-card">
+                <h4>Artisanat</h4>
+                <p class="small">Fabriquer équipements & potions.</p>
+                <button class="village-btn" onclick="renderCrafting()">🧪 Artisanat</button>
+            </div>
+            <div class="village-card">
+                <h4>Consommables</h4>
+                <p class="small">Utiliser les essences.</p>
+                <button class="village-btn" onclick="renderConsumables()">🧪 Consommables</button>
+            </div>
+        </div>`;
 }
 
 function updateBestiary(name, type){
@@ -502,7 +614,7 @@ function initEnemy(level=1, type='normal'){
     }
     return {name:m.name,hp:hp,maxHp:hp,atk:atk,type, affix};
 }
-let enemy=initEnemy();
+let enemy = null;
 
 // ===== LOOT =====
 function rollRarity(){
@@ -853,10 +965,18 @@ function updateUI(){
         </div>`;
     document.getElementById('hpBar').style.width=clamp(player.hp/maxHpTotal*100,0,100)+'%';
     document.getElementById('xpBar').style.width=clamp(player.xp/(player.level*XP_PER_LEVEL)*100,0,100)+'%';
-    const aff = enemy.affix ? ` (${enemy.affix.name})` : '';
-    document.getElementById('monsterStats').innerHTML=`👹 ${enemy.name}${aff} HP: ${enemy.hp}/${enemy.maxHp}`;
-    document.getElementById('monsterHpBar').style.width=clamp(enemy.hp/enemy.maxHp*100,0,100)+'%';
-    setMonsterImage('monsterImg', enemy.name);
+    if(isTownZone()){
+        document.getElementById('monsterStats').innerHTML='🛡️ Zone sûre — aucun combat.';
+        document.getElementById('monsterHpBar').style.width='0%';
+        const img = document.getElementById('monsterImg');
+        if(img) img.style.display = 'none';
+    } else if(enemy){
+        const aff = enemy.affix ? ` (${enemy.affix.name})` : '';
+        document.getElementById('monsterStats').innerHTML=`👹 ${enemy.name}${aff} HP: ${enemy.hp}/${enemy.maxHp}`;
+        document.getElementById('monsterHpBar').style.width=clamp(enemy.hp/enemy.maxHp*100,0,100)+'%';
+        setMonsterImage('monsterImg', enemy.name);
+    }
+    applyTownState();
     renderQuestBoard();
     renderZoneMap();
     checkAchievements();
@@ -888,6 +1008,7 @@ function updateDungeonUI(){
 
 // ===== COMBAT (MONDE) =====
 function attack(){
+    if(isTownZone()) {log('🏘️ Pas de combat en ville.'); return;}
     if(player.hp<=0)return;
     const dmg=Math.floor(Math.random()*4)+getAtk();
     enemy.hp-=dmg;
@@ -898,6 +1019,7 @@ function attack(){
     enemyTurn(false);
 }
 function useSkill(){
+    if(isTownZone()) {log('🏘️ Pas de combat en ville.'); return;}
     if(player.skill.cooldown>0){log('⏳ Compétence en recharge');return;}
     const dmg=Math.floor(getAtk()*player.skill.mult);
     enemy.hp-=dmg;
@@ -1146,7 +1268,7 @@ let inventoryOpen=false;
 let equipSort = 'power';
 let classChosen=false;
 let respawnBonus = {hp:0, atk:0, potions:0, label:''};
-let settings = {music:70, sfx:80, animSpeed:1, floatTexts:true};
+let settings = {music:70, sfx:80, animSpeed:1, floatTexts:true, layoutMode:'auto'};
 let factions = {Explorateurs:0, Arcanes:0, Chasseurs:0};
 function toggleInventory(){
     inventoryOpen=!inventoryOpen;
@@ -1238,6 +1360,9 @@ function renderCrafting(){
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>🛠️ Artisanat</h3>
         <div class="small">Recettes disponibles</div>`;
+    if(isTownZone()){
+        m.innerHTML += `<button class="item-btn" onclick="renderVillage()">← Retour au village</button>`;
+    }
 
     const canEquip = getDropQty('Essence néon')>=3 && getDropQty('Fragment cristallin')>=2;
     const canPotions = getDropQty('Poussière astrale')>=2 && getDropQty('Cendre arcanique')>=1;
@@ -1269,6 +1394,9 @@ function renderUpgrade(){
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>⬆️ Amélioration</h3>
         <div class="small">Coût: 2 Essence néon + 1 Fragment cristallin</div>`;
+    if(isTownZone()){
+        m.innerHTML += `<button class="item-btn" onclick="renderVillage()">← Retour au village</button>`;
+    }
     const can = getDropQty('Essence néon')>=2 && getDropQty('Fragment cristallin')>=1;
     const slots = [
         {slot:'weapon', label:'🗡️ Arme'},
@@ -1304,6 +1432,9 @@ function upgradeItem(slot){
 function renderConsumables(){
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>🧪 Consommables</h3>`;
+    if(isTownZone()){
+        m.innerHTML += `<button class="item-btn" onclick="renderVillage()">← Retour au village</button>`;
+    }
     const essence = getDropQty('Essence néon');
     const astral = getDropQty('Poussière astrale');
     if(essence===0 && astral===0){
@@ -1401,6 +1532,9 @@ function renderForge(){
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>⚒️ Forge</h3>
         <div class="small">Enchanter une pièce équipée (coût: 2 Fragment cristallin + 20 or)</div>`;
+    if(isTownZone()){
+        m.innerHTML += `<button class="item-btn" onclick="renderVillage()">← Retour au village</button>`;
+    }
     const slots = [
         {slot:'weapon', label:'🗡️ Arme'},
         {slot:'armor', label:'🛡️ Armure'},
@@ -1605,7 +1739,10 @@ function npcFaction(name){
 function renderShop(){
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>🏪 Marchand</h3>
-        <div class="small">Or: ${player.gold}</div>`;
+          <div class="small">Or: ${player.gold}</div>`;
+    if(isTownZone()){
+        m.innerHTML += `<button class="item-btn" onclick="renderVillage()">← Retour au village</button>`;
+    }
     const potionPrice = 15;
     const equipPrice = 40;
     m.innerHTML += `<button class="item-btn" ${player.gold>=potionPrice?'':'disabled'} onclick="buyPotion()">Acheter potion (+1) — ${potionPrice} or</button>`;
@@ -1778,27 +1915,27 @@ document.getElementById('actions').innerHTML=
  <button onclick="showStats()">Stats</button>
  <button onclick="toggleSecondary()">Menu+</button>`;
 
-document.getElementById('secondaryActions').innerHTML=
-`<div class="action-label">Exploration</div>
- <button onclick="fightZoneBoss()">Boss de zone</button>
- <button onclick="startArena()">Arène</button>
- <button onclick="renderQuestMenu()">Quêtes</button>
- <div class="action-label">Personnage</div>
- <button onclick="renderTalents()">Talents</button>
- <button onclick="renderSpecialization()">Spécialisation</button>
- <button onclick="renderCompanion()">Compagnon</button>
- <button onclick="renderArtifacts()">Artefacts</button>
- <div class="action-label">Services</div>
- <button onclick="renderShop()">Marchand</button>
- <button onclick="renderForge()">Forge</button>
- <button onclick="renderCrafting()">Artisanat</button>
- <button onclick="renderUpgrade()">Amélioration</button>
- <button onclick="renderConsumables()">Consommables</button>
- <div class="action-label">Social</div>
- <button onclick="renderNPC()">PNJ</button>
- <button onclick="renderFactions()">Factions</button>
- <button onclick="renderBestiary()">Bestiaire</button>
- <button onclick="renderAchievements()">Succès</button>`;
+  document.getElementById('secondaryActions').innerHTML=
+  `<div class="action-label">Exploration</div>
+   <button onclick="fightZoneBoss()">Boss de zone</button>
+   <button onclick="startArena()">Arène</button>
+   <button onclick="renderQuestMenu()">Quêtes</button>
+   <div class="action-label">Personnage</div>
+   <button onclick="renderTalents()">Talents</button>
+   <button onclick="renderSpecialization()">Spécialisation</button>
+   <button onclick="renderCompanion()">Compagnon</button>
+   <button onclick="renderArtifacts()">Artefacts</button>
+   <div class="action-label" data-town="1">Services</div>
+   <button data-town="1" onclick="renderShop()">Marchand</button>
+   <button data-town="1" onclick="renderForge()">Forge</button>
+   <button data-town="1" onclick="renderCrafting()">Artisanat</button>
+   <button data-town="1" onclick="renderUpgrade()">Amélioration</button>
+   <button data-town="1" onclick="renderConsumables()">Consommables</button>
+   <div class="action-label">Social</div>
+   <button onclick="renderNPC()">PNJ</button>
+   <button onclick="renderFactions()">Factions</button>
+   <button onclick="renderBestiary()">Bestiaire</button>
+   <button onclick="renderAchievements()">Succès</button>`;
 
 document.getElementById('dungeonActions').innerHTML=
 `<button onclick="dungeonAttack()">Attaquer</button>
@@ -1843,6 +1980,7 @@ function buildDungeon(){
 }
 function enterDungeon(){
     if(!classChosen){return;}
+    if(isTownZone()){log('🏘️ Quitte la ville pour entrer en donjon.');return;}
     inArena = false;
     inDungeon = true;
     buildDungeon();
@@ -1967,6 +2105,7 @@ function exitDungeon(){
 // ===== ARENA =====
 function startArena(){
     if(!classChosen) return;
+    if(isTownZone()){log('🏘️ Quitte la ville pour accéder à l’arène.');return;}
     inArena = true;
     arenaWave = 1;
     document.getElementById('game').style.display='none';
@@ -2023,12 +2162,17 @@ function renderZoneMap(){
     const map = document.getElementById('zoneMap');
     if(!map) return;
     map.innerHTML = zones.map(z=>{
-        const locked = player.level < z.reqLevel;
+        const isTown = !!z.isTown;
+        const locked = !isTown && player.level < z.reqLevel;
         const active = z.id===currentZone.id ? 'active' : '';
         const defeated = z.boss && player.defeatedBosses.includes(z.boss.name);
         const mark = defeated ? ' ✅' : '';
-        const label = locked ? `${z.name} (Nv ${z.reqLevel})${mark}` : `${z.name} (★${z.diff})${mark}`;
-        const sub = locked ? `Progression ${Math.min(player.level, z.reqLevel)}/${z.reqLevel}` : `Récompenses x${z.rewardMult}`;
+        const label = isTown
+            ? `${z.name} (Sûr)`
+            : locked ? `${z.name} (Nv ${z.reqLevel})${mark}` : `${z.name} (★${z.diff})${mark}`;
+        const sub = isTown
+            ? `Services, repos et amélioration`
+            : locked ? `Progression ${Math.min(player.level, z.reqLevel)}/${z.reqLevel}` : `Récompenses x${z.rewardMult}`;
         const pct = locked ? Math.min(100, Math.floor((player.level / z.reqLevel) * 100)) : 100;
         return `<button class="zone ${active} ${locked?'locked':''}" ${locked?'disabled':''} onclick="selectZone('${z.id}')">
             <div>${label}</div>
@@ -2040,14 +2184,22 @@ function renderZoneMap(){
 function selectZone(id){
     const z = zones.find(x=>x.id===id);
     if(!z) return;
-    if(player.level < z.reqLevel) return;
+    if(!z.isTown && player.level < z.reqLevel) return;
     currentZone = z;
-    enemy = initEnemy(player.level);
+    refreshZoneState();
+    if(z.isTown){
+        renderVillage();
+        log('🏘️ Tu arrives au village.');
+    } else {
+        const m = document.getElementById('menu');
+        if(m) m.innerHTML = '';
+    }
     updateUI();
     saveGame();
 }
 
 function fightZoneBoss(){
+    if(isTownZone()) return;
     if(player.level < currentZone.reqLevel) return;
     const b = currentZone.boss;
     if(!b) return;
@@ -2089,6 +2241,8 @@ function setClass(i){
     document.getElementById('game').style.display = '';
     classChosen = true;
     setActionsEnabled(true);
+    refreshZoneState();
+    if(isTownZone()) renderVillage();
     updateUI();
     saveGame();
 }
@@ -2168,7 +2322,7 @@ function loadGame(){
     bestiary = data.bestiary || {};
     achievements = data.achievements || {};
     initDailyWeekly();
-    currentZone = zones.find(z=>z.id===data.currentZoneId) || zones[0];
+    currentZone = zones.find(z=>z.id===data.currentZoneId) || getDefaultZone();
     classChosen = data.classChosen;
     respawnBonus = data.respawnBonus || {hp:0, atk:0, potions:0, label:''};
     if(classChosen){
@@ -2179,7 +2333,8 @@ function loadGame(){
         document.getElementById('questBoard').style.display = '';
         document.getElementById('game').style.display = '';
         setActionsEnabled(true);
-        enemy = initEnemy(player.level);
+        refreshZoneState();
+        if(isTownZone()) renderVillage();
         updateUI();
     } else {
         const startScreen = document.getElementById('startScreen');
@@ -2209,8 +2364,8 @@ function resetNewGame(){
     };
     questLevel = 1;
     initQuests(3);
-    currentZone = zones[0];
-    enemy = initEnemy(1);
+    currentZone = getDefaultZone();
+    refreshZoneState();
     dungeon = {level:1, rooms:[], current:0};
     inDungeon = false;
     inArena = false;
@@ -2302,6 +2457,40 @@ function closeOptions(){
     optionsScreen.innerHTML = '';
 }
 
+function applyLayoutMode(mode){
+    document.body.classList.remove('force-compact');
+    if(mode === 'compact'){
+        document.body.classList.add('force-compact');
+    }
+    updateLayoutControls();
+}
+
+function updateLayoutControls(){
+    const buttons = document.querySelectorAll('.layout-btn');
+    if(!buttons || buttons.length === 0) return;
+    buttons.forEach(btn=>{
+        btn.classList.toggle('active', btn.dataset.layout === settings.layoutMode);
+    });
+}
+
+function setLayoutMode(mode){
+    settings.layoutMode = mode || 'auto';
+    localStorage.setItem('rpgSettings', JSON.stringify(settings));
+    applySettings();
+}
+
+function initLayoutControls(){
+    const controls = document.getElementById('layoutControls');
+    if(!controls) return;
+    controls.addEventListener('click', (e)=>{
+        const target = e.target;
+        if(target && target.dataset && target.dataset.layout){
+            setLayoutMode(target.dataset.layout);
+        }
+    });
+    updateLayoutControls();
+}
+
 function saveOptions(){
     settings.music = Number(document.getElementById('optMusic').value);
     settings.sfx = Number(document.getElementById('optSfx').value);
@@ -2314,6 +2503,7 @@ function saveOptions(){
 
 function applySettings(){
     document.documentElement.style.setProperty('--anim-speed', settings.animSpeed);
+    applyLayoutMode(settings.layoutMode);
 }
 
 function loadSettings(){
@@ -2398,8 +2588,8 @@ function fullResetWithBonus(){
     player.skill.cooldown = 0;
     questLevel = 1;
     initQuests(3);
-    currentZone = zones[0];
-    enemy = initEnemy(player.level);
+    currentZone = getDefaultZone();
+    refreshZoneState();
 }
 
 // ===== RESTART =====
@@ -2414,8 +2604,10 @@ function restartGame(){
 // ===== INIT =====
 renderZoneMap();
 initQuests(3);
+refreshZoneState();
 updateUI();
 loadSettings();
+initLayoutControls();
 initSeasonalEvent();
 initDailyWeekly();
 showStartMenu();
