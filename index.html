@@ -133,8 +133,8 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
     #mobilePanels{
         display:flex;
         position:fixed;
-        left:12px;
-        right:12px;
+        left:50%;
+        transform:translateX(-50%);
         bottom:12px;
         gap:8px;
         padding:8px;
@@ -142,7 +142,8 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
         border:1px solid #2b2338;
         border-radius:14px;
         z-index:1000;
-        justify-content:space-between;
+        justify-content:center;
+        width:min(520px, calc(100% - 24px));
     }
     #mobilePanels button{flex:1}
     body{padding-bottom:90px}
