@@ -6,18 +6,33 @@
 <title>Plaine – Donjon & Quêtes</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&display=swap');
+:root{
+  --neo-bg-1:#181226;
+  --neo-bg-2:#120d1a;
+  --neo-ink:#f7f3ff;
+  --neo-muted:#cfc8dc;
+  --neo-border:rgba(127,0,255,0.28);
+  --neo-a:#ff3b7f;
+  --neo-b:#7f00ff;
+  --neo-c:#00ffd5;
+  --neo-shadow:0 10px 22px rgba(0,0,0,0.5);
+}
 body{margin:0;background:radial-gradient(1200px 600px at 15% 10%,rgba(127,0,255,0.25),transparent 60%),radial-gradient(900px 600px at 85% 20%,rgba(0,255,213,0.2),transparent 60%),#08060d;color:#eee;font-family:"Space Grotesk", sans-serif;display:flex;justify-content:center;align-items:flex-start;padding:20px;gap:20px}
 #questBoard{width:260px;position:sticky;top:20px;display:block}
 #mapBoard{width:260px;position:sticky;top:20px;display:block}
 #mobilePanels{display:none;width:100%;gap:10px;justify-content:center}
-#mobilePanels button{padding:8px 12px;font-size:14px;border-radius:10px;background:#1a1424;border:1px solid #2b2338;box-shadow:none}
-#mobilePanels button.active{background:linear-gradient(90deg,#00ffd5,#7f00ff);border:none;color:#0b0b12}
+#mobilePanels button{padding:10px 12px;font-size:13px;border-radius:12px;background:linear-gradient(180deg,#181226,#120d1a);border:1px solid rgba(127,0,255,0.25);box-shadow:0 10px 20px rgba(0,0,0,0.5);color:#f5f2ff}
+#mobilePanels button.active{background:linear-gradient(90deg,var(--neo-c),var(--neo-b));border:none;color:#0b0b12}
 #mobilePanels .panel-btn{border:none;color:#0b0b12}
-#mobilePanels .panel-btn.map{background:linear-gradient(90deg,#7f00ff,#00ffd5)}
-#mobilePanels .panel-btn.quest{background:linear-gradient(90deg,#00ffd5,#5b8dff)}
+#mobilePanels .panel-btn.map{background:linear-gradient(90deg,var(--neo-b),var(--neo-c))}
+#mobilePanels .panel-btn.quest{background:linear-gradient(90deg,var(--neo-c),#5b8dff)}
+#mobilePanels .panel-btn.back{background:linear-gradient(180deg,#1b1524,#120d18);border:1px solid rgba(255,255,255,0.08);color:#f5f2ff}
 #mobilePanels .panel-btn.back{background:#1b1524;color:#f5f2ff;border:1px solid #2e243a}
-#questPanel{padding:20px;background:rgba(12,12,12,0.95);border-radius:16px;box-shadow:0 0 25px #00ffd5}
-#mapPanel{margin-top:12px;padding:20px;background:rgba(18,8,24,0.95);border-radius:16px;box-shadow:0 0 25px #7f00ff}
+#questPanel{padding:20px;background:rgba(12,12,12,0.95);border-radius:16px;box-shadow:0 0 25px #00ffd5;position:relative;overflow:hidden}
+#mapPanel{margin-top:0;padding:20px;background:rgba(18,8,24,0.95);border-radius:16px;box-shadow:0 0 25px #7f00ff;position:relative;overflow:hidden}
+#questPanel::before,#mapPanel::before{content:"";position:absolute;inset:-2px;border-radius:18px;pointer-events:none;background:conic-gradient(from 180deg,#00ffd5,transparent 30%,#7f00ff,transparent 60%,#00ffd5);filter:blur(18px);opacity:0.25;animation:haloSpin 6s linear infinite}
+#questPanel::after,#mapPanel::after{content:"";position:absolute;inset:1px;border-radius:15px;pointer-events:none;border:1px solid rgba(255,255,255,0.08);box-shadow:inset 0 0 14px rgba(0,255,213,0.12)}
+@keyframes haloSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 #game,#dungeonUI{width:950px;padding:30px;background:rgba(12,12,18,0.95);border-radius:16px;box-shadow:0 0 40px rgba(255,59,127,0.6);margin-bottom:20px;}
 #hud{display:flex;justify-content:space-between;gap:10px;align-items:center;background:#12101a;border:1px solid #2a2436;border-radius:12px;padding:8px 10px;margin-bottom:8px}
 #hud .hud-left{display:flex;gap:8px;flex-wrap:wrap}
@@ -40,8 +55,18 @@ body{margin:0;background:radial-gradient(1200px 600px at 15% 10%,rgba(127,0,255,
 #dungeonUI{display:none;}
 h1{text-align:center;color:#ff3b7f;font-family:"Cinzel", serif;letter-spacing:1px}
 #log,#dungeonLog{height:150px;overflow-y:auto;background:#111;padding:10px;border-radius:10px;box-shadow:0 0 15px #ff3b7f;margin-bottom:10px}
-button{padding:12px 20px;margin:5px;border:none;border-radius:8px;background:#ff3b7f;color:#fff;font-size:16px;cursor:pointer;box-shadow:0 0 10px #ff3b7f;transition:0.2s}
-button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
+button{padding:12px 18px;margin:5px;border:none;border-radius:12px;background:linear-gradient(180deg,var(--neo-bg-1),var(--neo-bg-2));color:var(--neo-ink);font-size:16px;cursor:pointer;box-shadow:var(--neo-shadow);transition:transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease}
+button:hover{transform:translateY(-1px);box-shadow:0 12px 26px rgba(0,0,0,0.55);filter:brightness(1.05)}
+button:active{transform:translateY(0);filter:brightness(0.98)}
+button:focus-visible{outline:2px solid var(--neo-c);outline-offset:2px}
+button.btn-lg{font-size:15px;padding:11px 16px}
+button.btn-md{font-size:14px;padding:9px 14px}
+button.btn-sm{font-size:13px;padding:8px 12px}
+button.btn-combat{background:linear-gradient(90deg,var(--neo-a),var(--neo-b));border:none;color:#fff}
+button.btn-service{background:linear-gradient(90deg,var(--neo-c),#5b8dff);border:none;color:#0b0b12}
+button.btn-social{background:linear-gradient(90deg,#8a5bff,#00ffd5);border:none;color:#0b0b12}
+button.btn-util{background:linear-gradient(180deg,#191327,#110d18);border:1px solid var(--neo-border)}
+button.btn-menu{background:linear-gradient(180deg,#1c1630,#120d1a);border:1px solid rgba(255,255,255,0.08)}
 .emoji{display:inline-block;font-size:1.1em;line-height:1;vertical-align:-0.12em}
 .bar-container{width:100%;height:20px;background:#222;border-radius:10px;margin-bottom:8px}
 .bar{height:100%;border-radius:10px;transition:width 0.4s}
@@ -49,18 +74,26 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
 .xp{background:linear-gradient(90deg,#7f00ff,#b84dff)}
 .monster-bar{background:linear-gradient(90deg,#ff0000,#ff6666)}
 .monster-img{width:96px;height:96px;image-rendering:pixelated;background:#111;border:1px solid #2b2338;border-radius:10px;padding:4px;display:block;margin:6px auto}
+.hit-shake{animation:hitShake 0.25s ease}
+.boss-pulse{animation:bossPulse 1.6s ease-in-out infinite}
+@keyframes hitShake{0%{transform:translateX(0)}25%{transform:translateX(-4px)}50%{transform:translateX(4px)}75%{transform:translateX(-3px)}100%{transform:translateX(0)}}
+@keyframes bossPulse{0%{filter:drop-shadow(0 0 6px rgba(127,0,255,0.4))}50%{filter:drop-shadow(0 0 18px rgba(0,255,213,0.7))}100%{filter:drop-shadow(0 0 6px rgba(127,0,255,0.4))}}
 #actions,#menu,#dungeonActions,#secondaryActions{display:flex;flex-wrap:wrap;justify-content:center}
 #actions{gap:6px;align-items:center}
-#actions button{padding:8px 12px;font-size:14px;border-radius:10px;background:#1a1424;border:1px solid #2b2338;box-shadow:none}
-#actions button.primary-action{background:linear-gradient(90deg,#ff3b7f,#b84dff);border:none;box-shadow:0 0 12px rgba(255,59,127,0.4)}
+#actions button{padding:9px 14px;font-size:14px;border-radius:12px;background:linear-gradient(180deg,#191327,#110d18);border:1px solid var(--neo-border);box-shadow:var(--neo-shadow);color:var(--neo-ink)}
+#actions button.primary-action{background:linear-gradient(90deg,var(--neo-a),var(--neo-b));border:none;box-shadow:0 0 16px rgba(255,59,127,0.35)}
 #menu{margin-top:10px;min-height:60px;background:#0f0f16;border:1px solid #242030;border-radius:12px;padding:10px}
 #menu h3{margin:6px 0 8px 0;text-align:center;color:#ffe7ff;font-family:"Cinzel", serif}
 .secondary-panel{margin-top:6px;display:none;gap:8px;padding:8px;border-radius:12px;background:#12101a;border:1px solid #2a2436}
 .secondary-panel.show{display:flex}
 #secondaryActions{gap:6px}
-#secondaryActions button{padding:8px 10px;font-size:13px;border-radius:10px;background:#191421;border:1px solid #2b2338;box-shadow:none}
+#secondaryActions button{padding:8px 12px;font-size:13px;border-radius:10px;background:linear-gradient(180deg,#191327,#100c17);border:1px solid rgba(0,255,213,0.22);box-shadow:var(--neo-shadow);color:#efe8ff}
 .action-label{width:100%;text-align:center;color:#8f8aa0;font-size:12px;margin:2px 0}
-.item-btn{background:#222;border:1px solid #555;margin:3px}
+.item-btn{background:linear-gradient(180deg,#171327,#0f0b16);border:1px solid rgba(127,0,255,0.25);margin:4px;border-radius:10px;color:#f2edff;box-shadow:var(--neo-shadow)}
+.item-btn:hover{filter:brightness(1.06)}
+.talent-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#14101d;border:1px solid #2b2338;border-radius:12px;padding:8px 10px;margin:6px 0}
+.talent-row .small{margin:0}
+.talent-row .item-btn{margin:0}
 .small{font-size:14px;color:#bbb}
 .event-banner{margin:6px 0;padding:6px 10px;border-radius:10px;background:#1a1424;border:1px solid #2b2338;color:#d7cfea;font-size:12px}
 .quest-menu{display:flex;flex-direction:column;gap:10px}
@@ -74,9 +107,13 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
 #toast{position:fixed;top:20px;right:20px;z-index:2000;display:flex;flex-direction:column;gap:8px}
 .toast-item{background:#1a1424;border:1px solid #2b2338;color:#ffe7ff;padding:10px 14px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,0.45);min-width:220px}
 .toast-title{font-weight:600;margin-bottom:4px}
+#hoverTip{position:fixed;z-index:3000;pointer-events:none;background:#14101d;color:#f3eefc;border:1px solid #2b2338;border-radius:10px;padding:6px 8px;box-shadow:0 10px 25px rgba(0,0,0,0.45);font-size:12px;max-width:260px;display:none}
+.hover-suppressed{display:none !important}
 .bestiary-img{width:64px;height:64px;image-rendering:pixelated;border-radius:8px;border:1px solid #2b2338;background:#111;padding:2px}
 .bestiary-row{display:flex;gap:10px;align-items:center}
 #classScreen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(8,6,13,0.98),rgba(10,8,20,0.95));backdrop-filter:blur(6px);z-index:50}
+#startScreen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(6,6,10,0.98),rgba(18,10,28,0.96));backdrop-filter:blur(6px);z-index:60}
+#difficultyScreen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(6,6,10,0.98),rgba(18,10,28,0.96));backdrop-filter:blur(6px);z-index:70}
 .class-modal{width:min(980px,92vw);padding:28px 28px 22px;border-radius:20px;background:rgba(10,10,16,0.92);border:1px solid rgba(255,255,255,0.08);box-shadow:0 20px 80px rgba(0,0,0,0.6)}
 .class-title{font-family:"Cinzel", serif;text-align:center;font-size:32px;margin:0 0 8px;color:#ffe7ff}
 .class-sub{text-align:center;color:#b9b2c7;margin:0 0 22px}
@@ -88,20 +125,66 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
 .class-desc{font-size:14px;color:#cfc8dc;min-height:44px;margin:0 0 10px}
 .class-stats{display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:#dcd6e6;margin:0 0 12px}
 .class-stats span{background:#16131f;border:1px solid #2b2338;padding:4px 8px;border-radius:10px}
-.class-pick{width:100%;margin:0;padding:10px 12px;background:linear-gradient(90deg,#ff3b7f,#b84dff);box-shadow:0 0 20px rgba(255,59,127,0.5)}
+.class-pick{width:100%;margin:0;padding:10px 12px;background:linear-gradient(90deg,var(--neo-a),var(--neo-b));box-shadow:0 0 20px rgba(255,59,127,0.5)}
 .hidden{display:none !important}
 #startScreen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(6,6,10,0.98),rgba(18,10,28,0.96));backdrop-filter:blur(6px);z-index:60}
 .start-modal{width:min(760px,92vw);padding:34px;border-radius:22px;background:rgba(10,10,16,0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 90px rgba(0,0,0,0.65);text-align:center}
 .start-title{font-family:"Cinzel", serif;font-size:38px;margin:0 0 6px;color:#ffe7ff;letter-spacing:1px}
 .start-sub{margin:0 0 26px;color:#b9b2c7}
 .start-actions{display:grid;grid-template-columns:1fr;gap:12px}
-.start-btn{padding:14px 18px;border-radius:12px;font-size:18px;background:linear-gradient(90deg,#00ffd5,#7f00ff);box-shadow:0 0 22px rgba(0,255,213,0.35)}
+.start-btn{padding:14px 18px;border-radius:12px;font-size:18px;background:linear-gradient(90deg,var(--neo-c),var(--neo-b));box-shadow:0 0 22px rgba(0,255,213,0.35)}
 .start-btn.secondary{background:#1b1524;color:#f5f2ff;border:1px solid #2e243a;box-shadow:none}
 .start-hint{margin-top:16px;font-size:12px;color:#8f8aa0}
 .start-save{margin-top:10px;font-size:12px;color:#a9a3b7}
 .screen{opacity:0;transform:scale(0.98);transition:opacity calc(0.25s * var(--anim-speed,1)) ease, transform calc(0.25s * var(--anim-speed,1)) ease}
 .screen.show{opacity:1;transform:scale(1)}
 #optionsScreen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(6,6,10,0.98),rgba(18,10,28,0.96));backdrop-filter:blur(6px);z-index:70}
+#confirmScreen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:radial-gradient(800px 500px at 20% 10%,rgba(0,255,213,0.15),transparent 55%),radial-gradient(900px 600px at 80% 20%,rgba(127,0,255,0.18),transparent 60%),rgba(6,6,10,0.92);backdrop-filter:blur(8px);z-index:80}
+#worldBossScreen{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:radial-gradient(900px 600px at 20% 10%,rgba(0,255,213,0.18),transparent 55%),radial-gradient(1000px 700px at 80% 20%,rgba(127,0,255,0.2),transparent 60%),#05040a;z-index:90;overflow:hidden}
+#worldBossScreen .boss-backdrop{position:absolute;inset:-20%;background:conic-gradient(from 180deg,rgba(0,255,213,0.12),transparent 35%,rgba(127,0,255,0.18),transparent 70%);filter:blur(30px);animation:bossDrift 14s linear infinite;pointer-events:none}
+#worldBossScreen .boss-stars{position:absolute;inset:0;background:
+    radial-gradient(2px 2px at 20% 30%,rgba(255,255,255,0.4),transparent 50%),
+    radial-gradient(2px 2px at 60% 70%,rgba(255,255,255,0.35),transparent 50%),
+    radial-gradient(1px 1px at 80% 20%,rgba(255,255,255,0.35),transparent 50%),
+    radial-gradient(1px 1px at 35% 80%,rgba(255,255,255,0.3),transparent 50%);opacity:0.6;animation:starPulse 6s ease-in-out infinite;pointer-events:none}
+.boss-wrap{position:relative;width:min(980px,94vw);padding:22px;border-radius:24px;background:rgba(10,10,16,0.9);border:1px solid rgba(255,255,255,0.08);box-shadow:0 40px 120px rgba(0,0,0,0.7)}
+.boss-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+.boss-title{font-family:"Cinzel", serif;font-size:28px;color:#ffe7ff;margin:0}
+.boss-sub{color:#b9b2c7;font-size:13px}
+.boss-grid{display:grid;grid-template-columns:1.2fr 0.8fr;gap:16px}
+.boss-portrait{display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(18,12,28,0.9),rgba(10,8,18,0.9));border:1px solid rgba(127,0,255,0.25);border-radius:18px;padding:16px}
+.boss-portrait img{width:180px;height:180px;filter:drop-shadow(0 0 22px rgba(127,0,255,0.6))}
+.boss-debuffs{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.debuff-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:999px;background:#1a1424;border:1px solid #2b2338;color:#d7cfea;font-size:11px}
+.boss-cinematic{position:absolute;inset:0;pointer-events:none;animation:bossEntry 2.2s ease forwards}
+.boss-cinematic .ring{position:absolute;inset:15%;border:2px solid rgba(0,255,213,0.35);border-radius:50%;filter:blur(0.5px);animation:ringPulse 2.2s ease forwards}
+.boss-cinematic .burst{position:absolute;inset:0;background:radial-gradient(400px 300px at 50% 50%,rgba(127,0,255,0.35),transparent 70%);opacity:0;animation:burst 2.2s ease forwards}
+.boss-zoom{position:absolute;inset:0;pointer-events:none;backdrop-filter:blur(0px);animation:bossZoom 2.2s ease forwards}
+.phase-fx{position:absolute;inset:0;pointer-events:none;opacity:0}
+.phase-fx.fx1{background:radial-gradient(400px 300px at 30% 40%,rgba(0,255,213,0.25),transparent 70%);animation:phasePulse 1s ease}
+.phase-fx.fx2{background:conic-gradient(from 0deg,rgba(127,0,255,0.18),transparent 30%,rgba(255,59,127,0.18),transparent 60%);animation:phaseSpin 1.2s ease}
+.phase-fx.fx3{background:radial-gradient(500px 400px at 50% 50%,rgba(255,0,77,0.2),transparent 70%);animation:phasePulse 1s ease}
+.phase-fx.fx4{background:radial-gradient(600px 400px at 60% 40%,rgba(0,120,255,0.2),transparent 70%);animation:phaseSpin 1.1s ease}
+.boss-bars{display:grid;gap:8px}
+.boss-log{height:180px;overflow-y:auto;background:#0f0b16;border:1px solid #242030;border-radius:12px;padding:10px}
+.boss-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px}
+.boss-badge{display:inline-block;padding:4px 8px;border-radius:999px;background:#1a1424;border:1px solid #2b2338;color:#d7cfea;font-size:12px}
+.boss-intro{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(600px 400px at 50% 40%,rgba(0,255,213,0.25),transparent 60%),rgba(5,4,10,0.75);backdrop-filter:blur(6px);z-index:2;animation:introFade 2.4s ease forwards;pointer-events:none}
+.boss-cinematic,.boss-zoom,.boss-flash,.boss-shock,.phase-fx{pointer-events:none}
+.boss-intro h1{font-family:"Cinzel", serif;color:#ffe7ff;font-size:40px;letter-spacing:2px;text-shadow:0 0 18px rgba(127,0,255,0.6)}
+.boss-flash{position:absolute;inset:0;background:radial-gradient(600px 400px at 50% 50%,rgba(127,0,255,0.35),transparent 70%);opacity:0;pointer-events:none;animation:bossFlash 0.8s ease}
+.boss-shock{position:absolute;inset:0;border:2px solid rgba(0,255,213,0.35);border-radius:24px;opacity:0;pointer-events:none;animation:bossShock 0.8s ease}
+@keyframes bossDrift{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes starPulse{0%{opacity:0.4}50%{opacity:0.7}100%{opacity:0.4}}
+@keyframes introFade{0%{opacity:1}70%{opacity:1}100%{opacity:0}}
+@keyframes bossFlash{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+@keyframes bossShock{0%{opacity:0}40%{opacity:1}100%{opacity:0}}
+@keyframes bossEntry{0%{opacity:0}20%{opacity:1}80%{opacity:1}100%{opacity:0}}
+@keyframes ringPulse{0%{transform:scale(0.6);opacity:0}40%{transform:scale(1.05);opacity:0.8}100%{transform:scale(1.3);opacity:0}}
+@keyframes burst{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+@keyframes bossZoom{0%{opacity:0}20%{opacity:1;backdrop-filter:blur(0px)}80%{opacity:1;backdrop-filter:blur(6px)}100%{opacity:0;backdrop-filter:blur(0px)}}
+@keyframes phasePulse{0%{opacity:0}30%{opacity:1}100%{opacity:0}}
+@keyframes phaseSpin{0%{opacity:0;transform:rotate(0deg)}40%{opacity:1}100%{opacity:0;transform:rotate(220deg)}}
 .options-modal{width:min(720px,92vw);padding:28px;border-radius:20px;background:rgba(10,10,16,0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 90px rgba(0,0,0,0.65)}
 .options-title{font-family:"Cinzel", serif;font-size:30px;margin:0 0 10px;color:#ffe7ff;text-align:center}
 .options-grid{display:grid;grid-template-columns:1fr;gap:14px}
@@ -110,16 +193,32 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
 .opt-row input[type="range"]{width:220px}
 .opt-row select{background:#0f0c14;color:#fff;border:1px solid #2b2338;border-radius:8px;padding:6px 8px}
 .opt-actions{display:flex;justify-content:center;gap:10px;margin-top:16px}
-.opt-btn{padding:10px 16px;border-radius:10px;background:linear-gradient(90deg,#ff3b7f,#b84dff)}
+.opt-btn{padding:10px 16px;border-radius:10px;background:linear-gradient(90deg,var(--neo-a),var(--neo-b))}
 .opt-btn.secondary{background:#1b1524;color:#f5f2ff;border:1px solid #2e243a;box-shadow:none}
 .difficulty-modal{width:min(720px,92vw);padding:28px;border-radius:20px;background:rgba(10,10,16,0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 90px rgba(0,0,0,0.65)}
+.modal-wrap{position:relative}
+.modal-glow{position:absolute;inset:-2px;border-radius:24px;pointer-events:none;background:conic-gradient(from 180deg,#00ffd5,transparent 30%,#7f00ff,transparent 60%,#00ffd5);filter:blur(18px);opacity:0.28}
+.class-modal,.start-modal,.options-modal,.difficulty-modal{animation:popIn 0.25s ease}
 .difficulty-title{font-family:"Cinzel", serif;font-size:30px;margin:0 0 10px;color:#ffe7ff;text-align:center}
 .difficulty-sub{text-align:center;color:#b9b2c7;margin:0 0 18px}
 .difficulty-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
 .difficulty-card{background:#0f0f16;border:1px solid #242030;border-radius:12px;padding:12px}
 .difficulty-card h3{margin:0 0 6px 0;color:#00ffd5;font-family:"Cinzel", serif}
 .difficulty-card p{margin:0 0 10px 0;color:#cfc8dc;font-size:14px}
-.difficulty-pick{width:100%;margin:0;padding:10px 12px;background:linear-gradient(90deg,#00ffd5,#7f00ff);box-shadow:0 0 20px rgba(0,255,213,0.35)}
+.difficulty-pick{width:100%;margin:0;padding:10px 12px;background:linear-gradient(90deg,var(--neo-c),var(--neo-b));box-shadow:0 0 20px rgba(0,255,213,0.35)}
+.confirm-modal{width:min(620px,92vw);padding:24px;border-radius:18px;background:rgba(10,10,16,0.95);border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 90px rgba(0,0,0,0.65);text-align:center}
+.confirm-modal{animation:popIn 0.25s ease}
+.confirm-glow{position:absolute;inset:-2px;border-radius:20px;pointer-events:none;background:conic-gradient(from 180deg,#00ffd5,transparent 30%,#7f00ff,transparent 60%,#00ffd5);filter:blur(16px);opacity:0.35}
+.confirm-modal-wrap{position:relative}
+.confirm-btn{padding:10px 16px;border-radius:10px;background:linear-gradient(90deg,var(--neo-a),var(--neo-b));box-shadow:0 10px 26px rgba(127,0,255,0.25)}
+.confirm-btn.secondary{background:#1b1524;color:#f5f2ff;border:1px solid #2e243a;box-shadow:none}
+@keyframes popIn{from{transform:scale(0.96);opacity:0}to{transform:scale(1);opacity:1}}
+.confirm-title{font-family:"Cinzel", serif;font-size:26px;margin:0 0 8px;color:#ffe7ff}
+.confirm-sub{margin:0 0 16px;color:#b9b2c7}
+.confirm-warn{background:#1a1424;border:1px solid #2b2338;border-radius:12px;padding:10px 12px;color:#f1e8ff;font-size:13px}
+.confirm-actions{display:flex;justify-content:center;gap:10px;margin-top:16px}
+.confirm-btn{padding:10px 16px;border-radius:10px;background:linear-gradient(90deg,var(--neo-a),var(--neo-b))}
+.confirm-btn.secondary{background:#1b1524;color:#f5f2ff;border:1px solid #2e243a;box-shadow:none}
 @media (max-width: 720px){
     body{padding:12px;gap:12px;font-size:17px}
     #game,#dungeonUI{width:100%;padding:20px}
@@ -163,7 +262,10 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
 <div id="classScreen" class="screen"></div>
 <div id="optionsScreen" class="screen"></div>
 <div id="difficultyScreen" class="screen"></div>
+<div id="confirmScreen" class="screen"></div>
+<div id="worldBossScreen" class="screen"></div>
 <div id="toast"></div>
+<div id="hoverTip"></div>
 
 <div id="mobilePanels">
   <button id="btnCombatPanel" class="panel-btn back" onclick="closeMobilePanels()">⚔️ Combat</button>
@@ -241,10 +343,26 @@ let player = {
     companion:null,
     artifact:null,
     artifacts:[],
-    defeatedBosses:[]
+    defeatedBosses:[],
+    debuffs:[],
+    guard:false,
+    focus:false
 };
 let bestiary = {};
 let achievements = {};
+
+function getClassDefs(){
+    return [
+        {name:'Guerrier', role:'Tank brutal', desc:'Encaisse fort et frappe au corps à corps.', hp:60, atk:8, def:3, skill:{name:'Coup puissant', mult:2.0, cooldown:0, maxCd:3}},
+        {name:'Mage', role:'Dégâts magiques', desc:'Gros dégâts à distance, fragile.', hp:40, atk:12, def:1, skill:{name:'Boule de feu', mult:2.5, cooldown:0, maxCd:3}},
+        {name:'Archer', role:'DPS mobile', desc:'Rapide et précis, bon équilibre.', hp:50, atk:10, def:2, skill:{name:'Tir rapide', mult:1.8, cooldown:0, maxCd:2}},
+        {name:'Seigneur', role:'Commandant', desc:'Très tanky, pression constante.', hp:72, atk:9, def:3, skill:{name:'Frappe royale', mult:2.0, cooldown:0, maxCd:3}},
+        {name:'Roi', role:'Monarque', desc:'Équilibré, fort en duel prolongé.', hp:62, atk:10, def:2, skill:{name:'Décret', mult:2.2, cooldown:0, maxCd:3}},
+        {name:'Dresseur', role:'Maître des bêtes', desc:'Synergie avec compagnon, dégâts soutenus.', hp:54, atk:9, def:2, skill:{name:'Ordre sauvage', mult:1.9, cooldown:0, maxCd:3}},
+        {name:'Druide', role:'Nature', desc:'Polyvalent, contrôle et survie.', hp:58, atk:9, def:2, skill:{name:'Ronces', mult:2.1, cooldown:0, maxCd:3}},
+        {name:'Assassin', role:'Furtif', desc:'Très offensif, très fragile.', hp:42, atk:13, def:1, skill:{name:'Assaut de l’ombre', mult:2.8, cooldown:0, maxCd:3}}
+    ];
+}
 
 // ===== QUEST & DONJON =====
 let questLevel = 1;
@@ -260,6 +378,9 @@ let seasonalEvent = null;
 let dailyQuest = null;
 let weeklyQuest = null;
 let difficulty = {id:'normal', name:'Normal', enemyMult:1, lootBonus:0};
+let worldBoss = null;
+let worldBossPhase = 0;
+let worldBossActive = false;
 const zones = [
     {id:'village', name:'Village', diff:0, rewardMult:0, reqLevel:1, safe:true, monsters:[
         {name:'Rat des ruelles',hp:10,atk:2}
@@ -386,8 +507,9 @@ const BESTIARY_DESC = {
 };
 
 function pickSpriteBase(){
-    const path = location.pathname || '';
-    if(path.includes('/Html%20%26%20Css/') || path.includes('/Html & Css/')){
+    const raw = location.pathname || '';
+    const path = decodeURIComponent(raw);
+    if(path.includes('/Html & Css/') || (path.includes('/Html') && path.includes('Css/'))){
         return SPRITE_PATHS[0];
     }
     return SPRITE_PATHS[1];
@@ -396,6 +518,35 @@ function pickSpriteBase(){
 function setMonsterImage(imgId, name){
     const img = document.getElementById(imgId);
     if(!img) return;
+    if(name === 'Colosse Éternel'){
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+            <defs>
+                <radialGradient id="core" cx="50%" cy="50%" r="55%">
+                    <stop offset="0%" stop-color="#00ffd5"/>
+                    <stop offset="55%" stop-color="#7f00ff"/>
+                    <stop offset="100%" stop-color="#0b0712"/>
+                </radialGradient>
+                <linearGradient id="plate" x1="0" x2="1">
+                    <stop offset="0%" stop-color="#1a1424"/>
+                    <stop offset="100%" stop-color="#0f0b16"/>
+                </linearGradient>
+            </defs>
+            <rect width="192" height="192" rx="22" ry="22" fill="#0b0712"/>
+            <circle cx="96" cy="96" r="70" fill="url(#core)" opacity="0.9"/>
+            <circle cx="96" cy="96" r="34" fill="#0b0712"/>
+            <circle cx="96" cy="96" r="14" fill="#00ffd5"/>
+            <circle cx="96" cy="96" r="8" fill="#ffffff" opacity="0.9"/>
+            <path d="M24 120 Q96 90 168 120" fill="none" stroke="#7f00ff" stroke-width="5" opacity="0.7"/>
+            <path d="M30 70 Q60 50 90 60" fill="none" stroke="#00ffd5" stroke-width="3" opacity="0.6"/>
+            <path d="M102 60 Q132 50 162 70" fill="none" stroke="#00ffd5" stroke-width="3" opacity="0.6"/>
+            <rect x="30" y="130" width="132" height="22" rx="10" fill="url(#plate)" stroke="#2b2338" stroke-width="1"/>
+            <circle cx="48" cy="141" r="4" fill="#7f00ff"/>
+            <circle cx="144" cy="141" r="4" fill="#00ffd5"/>
+        </svg>`;
+        img.src = 'data:image/svg+xml;base64,' + btoa(svg);
+        img.style.display = 'block';
+        return;
+    }
     const file = MONSTER_SPRITES[name];
     if(!file){
         img.style.display = 'none';
@@ -447,8 +598,103 @@ function showToast(title, message){
     setTimeout(()=>{el.remove();}, 2500);
 }
 
+function applyHoverInfo(root){
+    if(!root) return;
+    root.querySelectorAll('.item-btn').forEach(btn=>{
+        if(btn.getAttribute('data-no-hover') === '1') return;
+        let info = btn.getAttribute('data-info') || btn.getAttribute('title') || '';
+        if(!info){
+            const next = btn.nextElementSibling;
+            if(next && next.classList.contains('small')){
+                info = next.textContent.trim();
+                btn.setAttribute('data-info', info);
+                next.classList.add('hover-suppressed');
+            }
+        }
+        if(info) btn.title = info;
+    });
+}
+
+function initHoverInfo(){
+    const menu = document.getElementById('menu');
+    const questList = document.getElementById('questList');
+    const tip = document.getElementById('hoverTip');
+    const body = document.body;
+    function showTip(text, x, y){
+        if(!tip || !text) return;
+        tip.textContent = text;
+        tip.style.display = 'block';
+        const pad = 12;
+        const maxX = window.innerWidth - pad;
+        const maxY = window.innerHeight - pad;
+        let left = x + 14;
+        let top = y + 14;
+        if(left > maxX) left = maxX;
+        if(top > maxY) top = maxY;
+        tip.style.left = left + 'px';
+        tip.style.top = top + 'px';
+    }
+    function hideTip(){
+        if(tip) tip.style.display = 'none';
+    }
+    function getInfo(btn){
+        let info = btn.getAttribute('data-info') || btn.getAttribute('title') || '';
+        if(!info){
+            const next = btn.nextElementSibling;
+            if(next && next.classList.contains('small')){
+                info = next.textContent.trim();
+            }
+        }
+        return info;
+    }
+    function handleClick(root, e){
+        if(!window.matchMedia('(max-width: 720px)').matches) return;
+        const btn = e.target.closest('.item-btn');
+        if(!btn || !root.contains(btn)) return;
+        const info = getInfo(btn);
+        if(info) showToast('Info', info);
+    }
+    function handleMove(root, e){
+        const btn = e.target.closest('.item-btn');
+        if(!btn || !root.contains(btn)) return;
+        const info = getInfo(btn);
+        if(info) showTip(info, e.clientX, e.clientY);
+    }
+    function handleOut(root, e){
+        if(!e.relatedTarget || !root.contains(e.relatedTarget)) hideTip();
+    }
+    if(menu){
+        const obs = new MutationObserver(()=>applyHoverInfo(menu));
+        obs.observe(menu, {childList:true, subtree:true});
+        applyHoverInfo(menu);
+        menu.addEventListener('click', (e)=>handleClick(menu, e));
+        menu.addEventListener('mousemove', (e)=>handleMove(menu, e));
+        menu.addEventListener('mouseleave', hideTip);
+        menu.addEventListener('mouseout', (e)=>handleOut(menu, e));
+    }
+    if(questList){
+        const obs2 = new MutationObserver(()=>applyHoverInfo(questList));
+        obs2.observe(questList, {childList:true, subtree:true});
+        applyHoverInfo(questList);
+        questList.addEventListener('click', (e)=>handleClick(questList, e));
+        questList.addEventListener('mousemove', (e)=>handleMove(questList, e));
+        questList.addEventListener('mouseleave', hideTip);
+        questList.addEventListener('mouseout', (e)=>handleOut(questList, e));
+    }
+    if(body){
+        const obs3 = new MutationObserver(()=>applyHoverInfo(body));
+        obs3.observe(body, {childList:true, subtree:true});
+        applyHoverInfo(body);
+        body.addEventListener('mousemove', (e)=>handleMove(body, e));
+        body.addEventListener('mouseout', (e)=>handleOut(body, e));
+    }
+}
+
 function renderBestiary(){
+    currentMenu = 'bestiary';
     const m = document.getElementById('menu');
+    const spriteBase = pickSpriteBase();
+    const spriteFallback = spriteBase.startsWith('../') ? SPRITE_PATHS[1] : SPRITE_PATHS[0];
     const entries = Object.entries(bestiary);
     m.innerHTML = `<h3>📖 Bestiaire</h3>`;
     if(entries.length===0){
@@ -458,11 +704,12 @@ function renderBestiary(){
     entries.sort((a,b)=>b[1].kills - a[1].kills);
     entries.forEach(([name,data])=>{
         const info = getMonsterInfo(name);
-        const img = MONSTER_SPRITES[name] ? `${SPRITE_PATH}${MONSTER_SPRITES[name]}` : '';
+        const img = MONSTER_SPRITES[name] ? `${spriteBase}${MONSTER_SPRITES[name]}` : '';
+        const imgFallback = MONSTER_SPRITES[name] ? `${spriteFallback}${MONSTER_SPRITES[name]}` : '';
         const desc = BESTIARY_DESC[name] || 'Créature mystérieuse.';
         m.innerHTML += `<div class="list-card">
             <div class="bestiary-row">
-                ${img ? `<img class="bestiary-img" src="${img}" alt="${name}">` : ''}
+                ${img ? `<img class="bestiary-img" src="${img}" onerror="this.onerror=null;this.src='${imgFallback}'" alt="${name}">` : ''}
                 <div>
                     <div><b>${name}</b></div>
                     <div class="small">${desc}</div>
@@ -475,6 +722,7 @@ function renderBestiary(){
 }
 
 function renderAchievements(){
+    currentMenu = 'achievements';
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>🏅 Succès</h3>`;
     ACHIEVEMENTS_LIST.forEach(a=>{
@@ -497,8 +745,23 @@ function getMonsterInfo(name){
     }
     return {hp:'?', atk:'?', type:'?'};
 }
-function log(msg){const l=document.getElementById('log');l.innerHTML+=msg+'<br>';l.scrollTop=l.scrollHeight;}
+function log(msg){
+    const l=document.getElementById('log');
+    l.innerHTML+=msg+'<br>';
+    l.scrollTop=l.scrollHeight;
+    if(worldBossActive) worldBossLog(msg);
+}
 function dungeonLog(msg){const l=document.getElementById('dungeonLog');l.innerHTML+=msg+'<br>';l.scrollTop=l.scrollHeight;}
+function worldBossLog(msg){
+    const l=document.getElementById('bossLog');
+    if(!l) return;
+    l.innerHTML+=msg+'<br>';
+    l.scrollTop=l.scrollHeight;
+}
+
+function playBossTheme(){}
+function stopBossTheme(){}
+function bossSfx(){}
 function rarityColor(r){return r==='Commun'?'#aaa':r==='Rare'?'#00bfff':r==='Épique'?'#d600ff':'#ffb200';}
 function getTalentAtk(){return (player.talents?.strength||0);}
 function getFactionAtk(){return applyFactionPerks().atk;}
@@ -513,12 +776,56 @@ function getArtifactLifesteal(){return player.artifact?.lifesteal || 0;}
 function getFactionHp(){return applyFactionPerks().hp;}
 function getTalentBonusHp(){return (player.talents?.vitality||0) * 5;}
 function getLuckBonus(){return (player.talents?.luck||0) * 0.02;}
-function getPotionHeal(){return POTION_HEAL + (player.talents?.alchemy||0) * 2;}
+function getPotionHeal(){
+    let heal = POTION_HEAL + (player.talents?.alchemy||0) * 2;
+    if(hasDebuff('epuisement')) heal = Math.floor(heal * 0.5);
+    return heal;
+}
 function getEventLootBonus(){return seasonalEvent?.bonus?.loot || 0;}
-function getAtk(){return player.atk+(player.equipment.weapon?player.equipment.weapon.atk:0)+(player.equipment.ring?player.equipment.ring.atk:0)+getTalentAtk()+getFactionAtk()+getSpecAtk()+getEventAtk()+getArtifactAtk();}
-function getDef(){return (player.equipment.armor?player.equipment.armor.def:0)+(player.equipment.helmet?player.equipment.helmet.def:0);}
+function getAtk(){
+    let atk = player.atk+(player.equipment.weapon?player.equipment.weapon.atk:0)+(player.equipment.ring?player.equipment.ring.atk:0)+getTalentAtk()+getFactionAtk()+getSpecAtk()+getEventAtk()+getArtifactAtk();
+    if(hasDebuff('malediction')) atk = Math.max(1, atk-2);
+    return atk;
+}
+function getDef(){
+    let def = (player.equipment.armor?player.equipment.armor.def:0)+(player.equipment.helmet?player.equipment.helmet.def:0);
+    if(hasDebuff('fragilite')) def = Math.max(0, def-2);
+    return def;
+}
 function getBonusHp(){return (player.equipment.amulet?player.equipment.amulet.hp:0)+getTalentBonusHp()+getFactionHp()+getSpecHp()+getArtifactHp();}
 function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
+
+function addDebuff(id, name, turns, effect){
+    if(!player.debuffs) player.debuffs = [];
+    const existing = player.debuffs.find(d=>d.id===id);
+    if(existing){
+        existing.turns = Math.max(existing.turns, turns);
+        return;
+    }
+    player.debuffs.push({id,name,turns,effect});
+}
+function hasDebuff(id){
+    return !!(player.debuffs || []).find(d=>d.id===id && d.turns>0);
+}
+function tickDebuffs(){
+    if(!player.debuffs || player.debuffs.length===0) return;
+    let dot = 0;
+    player.debuffs.forEach(d=>{
+        if(d.turns<=0) return;
+        if(d.effect==='bleed') dot += 4;
+        d.turns -= 1;
+    });
+    player.debuffs = player.debuffs.filter(d=>d.turns>0);
+    if(dot>0){
+        player.hp -= dot;
+        log(`🩸 Saignement: -${dot} PV`);
+    }
+}
+
+function getDebuffBadges(){
+    if(!player.debuffs || player.debuffs.length===0) return [];
+    return player.debuffs.map(d=>`Debuff: ${d.name} (${d.turns})`);
+}
 
 // ===== ENEMIES =====
 function initEnemy(level=1, type='normal'){
@@ -657,6 +964,7 @@ function checkQuestCompletion(q, source){
     q.completed = true;
     const doneMsg = `🏆 Quête terminée: ${q.name} ! (Va la valider)`;
     if(source==='dungeon') dungeonLog(doneMsg); else log(doneMsg);
+    showToast('Quête terminée', q.name);
     updateUI();
 }
 
@@ -689,6 +997,7 @@ function renderQuestBoard(){
 // ===== QUEST MENU =====
 let questSortMode = 'status';
 function renderQuestMenu(){
+    currentMenu = 'quests';
     const m = document.getElementById('menu');
     const sorted = sortQuests(quests.map((q,i)=>({q,i})));
     m.innerHTML = `<h3>📜 Quêtes</h3>
@@ -892,11 +1201,12 @@ function updateUI(){
     const hud = document.getElementById('hud');
     const totalBosses = zones.filter(z=>z.boss).length;
     const defeatedCount = player.defeatedBosses.length;
-    const buffs = [];
-    if(player.specialization) buffs.push(`Spé: ${player.specialization.name}`);
-    if(player.companion) buffs.push(`Compagnon: ${player.companion.name}`);
-    if(player.artifact) buffs.push(`Artefact: ${player.artifact.name}`);
-    if(seasonalEvent) buffs.push(`Event: ${seasonalEvent.name}`);
+      const buffs = [];
+      if(player.specialization) buffs.push(`Spé: ${player.specialization.name}`);
+      if(player.companion) buffs.push(`Compagnon: ${player.companion.name}`);
+      if(player.artifact) buffs.push(`Artefact: ${player.artifact.name}`);
+      if(seasonalEvent) buffs.push(`Event: ${seasonalEvent.name}`);
+      buffs.push(...getDebuffBadges());
     hud.innerHTML = `
         <div class="hud-left">${buffs.map(b=>`<span class="pill">${b}</span>`).join('')}</div>
         <div class="hud-right">
@@ -924,6 +1234,8 @@ function updateUI(){
     renderQuestBoard();
     renderZoneMap();
     buildSecondaryActions();
+    updateActionVisibility();
+    updateWorldBossUI();
     checkAchievements();
 }
 function updateDungeonUI(){
@@ -956,8 +1268,11 @@ function attack(){
     if(currentZone.safe){log('🏠 Le Village est une zone sûre.');return;}
     if(!enemy) return;
     if(player.hp<=0)return;
-    const dmg=Math.floor(Math.random()*4)+getAtk();
+    let dmg=Math.floor(Math.random()*4)+getAtk();
+    if(player.focus){dmg=Math.floor(dmg*1.4); player.focus=false;}
     enemy.hp-=dmg;
+    const img = document.getElementById('monsterImg');
+    if(img){img.classList.add('hit-shake'); setTimeout(()=>img.classList.remove('hit-shake'),250);}
     log(`⚔️ Tu infliges ${dmg} dégâts à ${enemy.name}`);
     applyLifesteal(dmg);
     companionStrike(enemy);
@@ -968,8 +1283,11 @@ function useSkill(){
     if(currentZone.safe){log('🏠 Le Village est une zone sûre.');return;}
     if(!enemy) return;
     if(player.skill.cooldown>0){log('⏳ Compétence en recharge');return;}
-    const dmg=Math.floor(getAtk()*player.skill.mult);
+    let dmg=Math.floor(getAtk()*player.skill.mult);
+    if(player.focus){dmg=Math.floor(dmg*1.4); player.focus=false;}
     enemy.hp-=dmg;
+    const img = document.getElementById('monsterImg');
+    if(img){img.classList.add('hit-shake'); setTimeout(()=>img.classList.remove('hit-shake'),250);}
     player.skill.cooldown=player.skill.maxCd;
     log(`🔥 ${player.skill.name} inflige ${dmg} dégâts !`);
     applyLifesteal(dmg);
@@ -977,20 +1295,66 @@ function useSkill(){
     if(enemy.hp<=0){winCombat(false);return;}
     enemyTurn(false);
 }
+function quickStrike(){
+    if(!worldBossActive || !enemy || enemy.type!=='worldBoss'){log('🌌 Cette action est réservée au boss mondial.');return;}
+    if(currentZone.safe){log('🏠 Le Village est une zone sûre.');return;}
+    if(!enemy) return;
+    if(player.hp<=0)return;
+    const dmg=Math.max(1, Math.floor(getAtk()*0.7));
+    enemy.hp-=dmg;
+    const img = document.getElementById('monsterImg');
+    if(img){img.classList.add('hit-shake'); setTimeout(()=>img.classList.remove('hit-shake'),250);}
+    if(Math.random()<0.2) addDebuff('saignement','Saignement',2,'bleed');
+    log(`⚡ Frappe rapide: ${dmg} dégâts`);
+    if(enemy.hp<=0){winCombat(false);return;}
+    enemyTurn(false);
+}
+function guard(){
+    if(!worldBossActive || !enemy || enemy.type!=='worldBoss'){log('🌌 Cette action est réservée au boss mondial.');return;}
+    if(currentZone.safe){log('🏠 Le Village est une zone sûre.');return;}
+    if(player.hp<=0)return;
+    player.guard=true;
+    log('🛡️ Parade: réduit les prochains dégâts.');
+    enemyTurn(false);
+}
+function focus(){
+    if(!worldBossActive || !enemy || enemy.type!=='worldBoss'){log('🌌 Cette action est réservée au boss mondial.');return;}
+    if(currentZone.safe){log('🏠 Le Village est une zone sûre.');return;}
+    if(player.hp<=0)return;
+    player.focus=true;
+    log('🎯 Concentration: prochain coup plus puissant.');
+    enemyTurn(false);
+}
 function enemyTurn(isDungeon){
     const foe = isDungeon ? dungeonEnemy : enemy;
     if(!foe) return;
-    const dmg=Math.max(1,foe.atk-getDef());
+    let dmg=Math.max(1,foe.atk-getDef());
+    if(player.guard){dmg=Math.max(1, Math.floor(dmg*0.5)); player.guard=false;}
     player.hp-=dmg;
     if(isDungeon){
         dungeonLog(`💥 ${foe.name} inflige ${dmg}`);
     } else {
         log(`💥 ${foe.name} inflige ${dmg}`);
     }
+    if(!isDungeon){
+        checkWorldBossPhase(foe);
+        tickDebuffs();
+    }
     if(player.hp<=0){
-        if(isDungeon) dungeonLog('💀 Tu es mort ! Redémarrage...');
-        else log('💀 Tu es mort ! Redémarrage...');
-        setTimeout(restartGame,1500);
+        if(difficulty?.oneLife){
+            const msg = '💀 Mort définitive (Impossible). Partie terminée.';
+            if(isDungeon) dungeonLog(msg); else log(msg);
+            showToast('Game Over', 'Mode Impossible: une seule vie.');
+            localStorage.removeItem('rpgSave');
+            setActionsEnabled(false);
+            closeWorldBossScreen();
+            showStartMenu();
+        } else {
+            if(isDungeon) dungeonLog('💀 Tu es mort ! Redémarrage...');
+            else log('💀 Tu es mort ! Redémarrage...');
+            if(worldBossActive) closeWorldBossScreen();
+            setTimeout(restartGame,1500);
+        }
         return;
     }
     tickCooldown();
@@ -1009,8 +1373,11 @@ function potion(){
 // ===== COMBAT (DONJON) =====
 function dungeonAttack(){
     if(player.hp<=0 || !dungeonEnemy) return;
-    const dmg=Math.floor(Math.random()*4)+getAtk();
+    let dmg=Math.floor(Math.random()*4)+getAtk();
+    if(player.focus){dmg=Math.floor(dmg*1.4); player.focus=false;}
     dungeonEnemy.hp-=dmg;
+    const img = document.getElementById('dungeonMonsterImg');
+    if(img){img.classList.add('hit-shake'); setTimeout(()=>img.classList.remove('hit-shake'),250);}
     dungeonLog(`⚔️ Tu infliges ${dmg} dégâts à ${dungeonEnemy.name}`);
     applyLifesteal(dmg);
     companionStrike(dungeonEnemy);
@@ -1019,13 +1386,39 @@ function dungeonAttack(){
 }
 function dungeonSkill(){
     if(player.skill.cooldown>0){dungeonLog('⏳ Compétence en recharge');return;}
-    const dmg=Math.floor(getAtk()*player.skill.mult);
+    let dmg=Math.floor(getAtk()*player.skill.mult);
+    if(player.focus){dmg=Math.floor(dmg*1.4); player.focus=false;}
     dungeonEnemy.hp-=dmg;
+    const img = document.getElementById('dungeonMonsterImg');
+    if(img){img.classList.add('hit-shake'); setTimeout(()=>img.classList.remove('hit-shake'),250);}
     player.skill.cooldown=player.skill.maxCd;
     dungeonLog(`🔥 ${player.skill.name} inflige ${dmg} dégâts !`);
     applyLifesteal(dmg);
     companionStrike(dungeonEnemy);
     if(dungeonEnemy.hp<=0){winCombat(true);return;}
+    enemyTurn(true);
+}
+function dungeonQuickStrike(){
+    if(player.hp<=0 || !dungeonEnemy) return;
+    const dmg=Math.max(1, Math.floor(getAtk()*0.7));
+    dungeonEnemy.hp-=dmg;
+    const img = document.getElementById('dungeonMonsterImg');
+    if(img){img.classList.add('hit-shake'); setTimeout(()=>img.classList.remove('hit-shake'),250);}
+    if(Math.random()<0.2) addDebuff('saignement','Saignement',2,'bleed');
+    dungeonLog(`⚡ Frappe rapide: ${dmg} dégâts`);
+    if(dungeonEnemy.hp<=0){winCombat(true);return;}
+    enemyTurn(true);
+}
+function dungeonGuard(){
+    if(player.hp<=0 || !dungeonEnemy) return;
+    player.guard=true;
+    dungeonLog('🛡️ Parade: réduit les prochains dégâts.');
+    enemyTurn(true);
+}
+function dungeonFocus(){
+    if(player.hp<=0 || !dungeonEnemy) return;
+    player.focus=true;
+    dungeonLog('🎯 Concentration: prochain coup plus puissant.');
     enemyTurn(true);
 }
 function dungeonPotion(){
@@ -1049,6 +1442,11 @@ function grantXP(amount){
         player.atk += 2;
         player.talentPoints += 1;
         log(`⭐ Niveau ${player.level} atteint ! +10 PV, +2 ATK, +1 point de talent`);
+        zones.forEach(z=>{
+            if(z.reqLevel === player.level){
+                showToast('Zone débloquée', z.name);
+            }
+        });
     }
 }
 function tickCooldown(){
@@ -1098,14 +1496,173 @@ function applyFactionPerks(){
     return bonus;
 }
 
+function initWorldBoss(){
+    worldBossPhase = 0;
+    return {
+        name:'Colosse Éternel',
+        hp:2300,
+        maxHp:2300,
+        atk:46,
+        type:'worldBoss',
+        phases:[
+            {threshold:0.75, debuff:{id:'fragilite', name:'Fragilité', turns:4, effect:'defDown'}},
+            {threshold:0.50, debuff:{id:'malediction', name:'Malédiction', turns:4, effect:'atkDown'}},
+            {threshold:0.25, debuff:{id:'saignement', name:'Saignement', turns:4, effect:'bleed'}},
+            {threshold:0.10, debuff:{id:'epuisement', name:'Épuisement', turns:3, effect:'potionDown'}}
+        ]
+    };
+}
+
+function fightWorldBoss(){
+    if(!classChosen) return;
+    if(inDungeon) return;
+    worldBoss = initWorldBoss();
+    enemy = worldBoss;
+    worldBossActive = true;
+    openWorldBossScreen();
+    log('🌌 Un boss mondial apparaît: Colosse Éternel !');
+    showToast('Boss mondial', 'Colosse Éternel');
+    updateUI();
+}
+
+function checkWorldBossPhase(foe){
+    if(!foe || foe.type!=='worldBoss') return;
+    const pct = foe.hp / foe.maxHp;
+    const phases = foe.phases || [];
+    if(worldBossPhase >= phases.length) return;
+    const next = phases[worldBossPhase];
+    if(pct <= next.threshold){
+        worldBossPhase += 1;
+        addDebuff(next.debuff.id, next.debuff.name, next.debuff.turns, next.debuff.effect);
+        log(`🌀 Phase ${worldBossPhase}: ${next.debuff.name} appliqué !`);
+        showToast('Phase du boss', `${next.debuff.name} (${next.debuff.turns} tours)`);
+        triggerBossPhaseFX();
+        bossPhaseAttack();
+    }
+}
+
+function triggerBossPhaseFX(){
+    const wrap = document.querySelector('.boss-wrap');
+    if(!wrap) return;
+    const flash = document.createElement('div');
+    flash.className = 'boss-flash';
+    const shock = document.createElement('div');
+    shock.className = 'boss-shock';
+    const phaseFx = document.createElement('div');
+    const phaseClass = 'fx' + Math.min(4, Math.max(1, worldBossPhase));
+    phaseFx.className = 'phase-fx ' + phaseClass;
+    wrap.appendChild(flash);
+    wrap.appendChild(shock);
+    wrap.appendChild(phaseFx);
+    setTimeout(()=>{flash.remove(); shock.remove(); phaseFx.remove();}, 1200);
+}
+function bossPhaseAttack(){
+    const extra = 12 + worldBossPhase*6;
+    player.hp -= extra;
+    log(`💥 Attaque de phase: -${extra} PV`);
+    updateUI();
+}
+
+function openWorldBossScreen(){
+    const screen = document.getElementById('worldBossScreen');
+    if(!screen) return;
+    screen.innerHTML = `
+        <div class="boss-backdrop"></div>
+        <div class="boss-stars"></div>
+        <div class="boss-wrap">
+            <div class="boss-cinematic"><div class="ring"></div><div class="burst"></div></div>
+            <div class="boss-zoom"></div>
+            <div class="boss-intro"><h1>COLOSSE ÉTERNEL</h1></div>
+            <div class="boss-header">
+                <div>
+                    <h2 class="boss-title">Colosse Éternel</h2>
+                    <div class="boss-sub">Premier boss mondial — plusieurs phases</div>
+                </div>
+                <div class="boss-badge">Phase <span id="bossPhaseLabel">1</span></div>
+            </div>
+            <div class="boss-grid">
+                <div class="boss-portrait">
+                    <img id="bossImg" alt="Boss mondial">
+                </div>
+                <div class="boss-bars">
+                    <div class="bar-container"><div id="bossHpBar" class="bar monster-bar"></div></div>
+                    <div id="bossStats" class="small"></div>
+                    <div id="bossDebuffs" class="boss-debuffs"></div>
+                    <div class="bar-container"><div id="bossPlayerHpBar" class="bar hp"></div></div>
+                    <div id="bossPlayerStats" class="small"></div>
+                    <div id="bossLog" class="boss-log"></div>
+                </div>
+            </div>
+            <div class="boss-actions">
+                <button class="btn-combat btn-md" onclick="attack()">⚔️ Attaquer</button>
+                <button class="btn-combat btn-md" onclick="useSkill()">✨ Compétence</button>
+                <button class="btn-combat btn-md" onclick="potion()">🧪 Potion</button>
+                <button class="btn-combat btn-md" onclick="quickStrike()">⚡ Frappe</button>
+                <button class="btn-util btn-md" onclick="guard()">🛡️ Parade</button>
+                <button class="btn-util btn-md" onclick="focus()">🎯 Concentration</button>
+                <button class="btn-menu btn-sm" onclick="closeWorldBossScreen()">↩️ Quitter</button>
+            </div>
+        </div>`;
+    screen.style.display = 'flex';
+    requestAnimationFrame(()=>screen.classList.add('show'));
+    setMainVisibility(false);
+    updateWorldBossUI();
+    playBossTheme();
+}
+
+function closeWorldBossScreen(){
+    const screen = document.getElementById('worldBossScreen');
+    if(!screen) return;
+    screen.classList.remove('show');
+    screen.style.display = 'none';
+    screen.innerHTML = '';
+    worldBossActive = false;
+    stopBossTheme();
+    setMainVisibility(true);
+}
+
+function updateWorldBossUI(){
+    if(!worldBossActive || !enemy) return;
+    const bossImg = document.getElementById('bossImg');
+    if(bossImg) setMonsterImage('bossImg', enemy.name);
+    const maxHpTotal = player.maxHp + getBonusHp();
+    const bossHp = document.getElementById('bossHpBar');
+    const bossStats = document.getElementById('bossStats');
+    const playerHp = document.getElementById('bossPlayerHpBar');
+    const playerStats = document.getElementById('bossPlayerStats');
+    const phaseLabel = document.getElementById('bossPhaseLabel');
+    const debuffs = document.getElementById('bossDebuffs');
+    if(bossHp) bossHp.style.width = clamp(enemy.hp/enemy.maxHp*100,0,100)+'%';
+    if(bossStats) bossStats.textContent = `👹 ${enemy.name} HP ${enemy.hp}/${enemy.maxHp} | ATK ${enemy.atk}`;
+    if(playerHp) playerHp.style.width = clamp(player.hp/maxHpTotal*100,0,100)+'%';
+    if(playerStats) playerStats.textContent = `👤 ${player.class} HP ${player.hp}/${maxHpTotal} | ATK ${getAtk()} | DEF ${getDef()}`;
+    if(phaseLabel) phaseLabel.textContent = String(Math.max(1, worldBossPhase+1));
+    if(debuffs){
+        const map = {
+            fragilite:'🪓',
+            malediction:'☠️',
+            saignement:'🩸',
+            epuisement:'🥀'
+        };
+        const list = (player.debuffs || []);
+        debuffs.innerHTML = list.length
+            ? list.map(d=>`<span class="debuff-chip">${map[d.id]||'⚠️'} ${d.name} (${d.turns})</span>`).join('')
+            : `<span class="debuff-chip">✅ Aucun débuff</span>`;
+    }
+}
+
 function renderFactions(){
+    currentMenu = 'factions';
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>🏛️ Factions</h3>
         <div class="small">Bonus actifs: ${applyFactionPerks().label}</div>`;
     Object.keys(factions).forEach(name=>{
         const rep = factions[name];
         const rank = getFactionRank(rep);
-        m.innerHTML += `<div class="small">${name}: ${rep} (${rank})</div>`;
+        m.innerHTML += `<div class="talent-row">
+            <div class="small">${name}: ${rep} (${rank})</div>
+            <button class="item-btn" data-no-hover="1" onclick="npcFaction('${name}')">Détails</button>
+        </div>`;
     });
     m.innerHTML += `<div class="small">Les quêtes augmentent ta réputation.</div>`;
 }
@@ -1161,6 +1718,18 @@ function companionStrike(target){
 // ===== LOOT & WIN =====
 function winCombat(isDungeon){
     const foe = isDungeon ? dungeonEnemy : enemy;
+    if(foe.type==='worldBoss'){
+        log(`🌌 Boss mondial vaincu: ${foe.name} !`);
+        showToast('Victoire', 'Boss mondial vaincu !');
+        grantXP(120);
+        grantGold(120);
+        worldBoss = null;
+        worldBossPhase = 0;
+        closeWorldBossScreen();
+        enemy = initEnemy(player.level);
+        updateUI();
+        return;
+    }
     const xpGain = Math.floor((12 + player.level*4 + (foe.type==='boss'?20:0)) * currentZone.rewardMult);
     grantXP(xpGain);
     const goldGain = Math.floor((6 + player.level*2 + (foe.type==='boss'?15:0)) * currentZone.rewardMult);
@@ -1214,16 +1783,34 @@ function winCombat(isDungeon){
 let inventoryOpen=false;
 let equipSort = 'power';
 let classChosen=false;
+let currentMenu=null;
 let respawnBonus = {hp:0, atk:0, potions:0, label:''};
 let settings = {music:70, sfx:80, animSpeed:1, floatTexts:true};
 let factions = {Explorateurs:0, Arcanes:0, Chasseurs:0};
-function toggleInventory(){
-    inventoryOpen=!inventoryOpen;
+function closeMenu(){
     const m=document.getElementById('menu');
-    if(!inventoryOpen){m.innerHTML='';return;}
-    renderInventory();
+    if(m) m.innerHTML='';
+    currentMenu = null;
+    inventoryOpen = false;
+    equipmentOpen = false;
+    statsOpen = false;
+}
+function toggleMenu(key, renderFn){
+    if(currentMenu===key){
+        closeMenu();
+        return;
+    }
+    currentMenu = key;
+    inventoryOpen = key==='inventory';
+    equipmentOpen = key==='equipment';
+    statsOpen = key==='stats';
+    renderFn();
+}
+function toggleInventory(){
+    toggleMenu('inventory', renderInventory);
 }
 function renderInventory(){
+    currentMenu = 'inventory';
     const m=document.getElementById('menu');
     m.innerHTML='<h3>🎒 Inventaire (Drops)</h3>';
     const drops = player.inventory.drops;
@@ -1239,12 +1826,10 @@ function renderInventory(){
 // ===== EQUIPMENT =====
 let equipmentOpen=false;
 function toggleEquipment(){
-    equipmentOpen=!equipmentOpen;
-    const m=document.getElementById('menu');
-    if(!equipmentOpen){m.innerHTML='';return;}
-    renderEquipment();
+    toggleMenu('equipment', renderEquipment);
 }
 function renderEquipment(){
+    currentMenu = 'equipment';
     const m = document.getElementById('menu');
     m.innerHTML = '<h3>⚙️ Équipement</h3>';
     m.innerHTML += `<button class="item-btn" onclick="autoEquip()">Auto-équiper (meilleur)</button>`;
@@ -1266,6 +1851,7 @@ function renderEquipment(){
     });
 }
 function showEquipList(slot){
+    currentMenu = 'equipment';
     const m = document.getElementById('menu');
     const label =
         slot==='weapon' ? '🗡️ Arme' :
@@ -1304,6 +1890,7 @@ function showEquipList(slot){
     m.innerHTML += `<button class="item-btn" onclick="renderEquipment()">⬅️ Retour</button>`;
 }
 function renderCrafting(){
+    currentMenu = 'crafting';
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>🛠️ Artisanat</h3>
         <div class="small">Recettes disponibles</div>`;
@@ -1311,10 +1898,14 @@ function renderCrafting(){
     const canEquip = getDropQty('Essence néon')>=3 && getDropQty('Fragment cristallin')>=2;
     const canPotions = getDropQty('Poussière astrale')>=2 && getDropQty('Cendre arcanique')>=1;
 
-    m.innerHTML += `<div class="small">Équipement aléatoire (3 Essence néon + 2 Fragment cristallin)</div>
-        <button class="item-btn" ${canEquip?'':'disabled'} onclick="craftEquipment()">Fabriquer</button>`;
-    m.innerHTML += `<div class="small">Potions x2 (2 Poussière astrale + 1 Cendre arcanique)</div>
-        <button class="item-btn" ${canPotions?'':'disabled'} onclick="craftPotions()">Fabriquer</button>`;
+    m.innerHTML += `<div class="talent-row">
+        <div class="small">Équipement aléatoire (3 Essence néon + 2 Fragment cristallin)</div>
+        <button class="item-btn" data-no-hover="1" ${canEquip?'':'disabled'} onclick="craftEquipment()">Fabriquer</button>
+    </div>`;
+    m.innerHTML += `<div class="talent-row">
+        <div class="small">Potions x2 (2 Poussière astrale + 1 Cendre arcanique)</div>
+        <button class="item-btn" data-no-hover="1" ${canPotions?'':'disabled'} onclick="craftPotions()">Fabriquer</button>
+    </div>`;
 }
 function craftEquipment(){
     if(!spendDropByName('Essence néon',3)) return;
@@ -1335,6 +1926,7 @@ function craftPotions(){
     saveGame();
 }
 function renderUpgrade(){
+    currentMenu = 'upgrade';
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>⬆️ Amélioration</h3>
         <div class="small">Coût: 2 Essence néon + 1 Fragment cristallin</div>`;
@@ -1371,6 +1963,7 @@ function upgradeItem(slot){
     saveGame();
 }
 function renderConsumables(){
+    currentMenu = 'consumables';
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>🧪 Consommables</h3>`;
     const essence = getDropQty('Essence néon');
@@ -1388,27 +1981,67 @@ function renderConsumables(){
 }
 
 // ===== SPECIALISATIONS =====
+const SPEC_CURVE = {
+    heavy:{atk:[3,4,5,6,7], hp:[18,22,26,30,34], mult:[2.2,2.5,2.8,3.1,3.4]},
+    tank:{atk:[2,3,4,5,6], hp:[22,26,30,34,38], mult:[2.0,2.3,2.6,2.9,3.2]},
+    balanced:{atk:[3,4,5,6,7], hp:[12,16,20,24,28], mult:[2.2,2.5,2.8,3.1,3.4]},
+    ranged:{atk:[4,5,6,7,8], hp:[8,12,16,18,20], mult:[2.3,2.6,2.9,3.2,3.5]},
+    burst:{atk:[5,6,7,8,9], hp:[6,8,10,12,14], mult:[2.6,2.9,3.2,3.5,3.8]}
+};
+function makeSpecs(className, theme, names, skillNames){
+    const levels = [10,15,20,25,30];
+    const curve = SPEC_CURVE[theme] || SPEC_CURVE.balanced;
+    const out = [];
+    for(let i=0;i<levels.length;i++){
+        out.push({
+            name:names[i],
+            level:levels[i],
+            atk:curve.atk[i],
+            hp:curve.hp[i],
+            skill:{name:skillNames[i], mult:curve.mult[i], maxCd: i<2 ? 3 : 4 + (i===4?1:0)}
+        });
+    }
+    return out;
+}
 const SPECIALIZATIONS = {
-    Guerrier:[
-        {name:'Berserker', atk:4, hp:0, skill:{name:'Rage sanglante', mult:2.4, maxCd:3}},
-        {name:'Paladin', atk:2, hp:20, skill:{name:'Choc sacré', mult:2.2, maxCd:3}},
-        {name:'Gardien', atk:1, hp:30, skill:{name:'Mur de fer', mult:2.0, maxCd:4}}
-    ],
-    Mage:[
-        {name:'Pyromancien', atk:5, hp:0, skill:{name:'Explosion', mult:2.8, maxCd:3}},
-        {name:'Arcaniste', atk:3, hp:10, skill:{name:'Rayon', mult:2.5, maxCd:3}},
-        {name:'Chronomancien', atk:2, hp:15, skill:{name:'Faille', mult:2.3, maxCd:2}}
-    ],
-    Archer:[
-        {name:'Sniper', atk:5, hp:0, skill:{name:'Tir perforant', mult:2.6, maxCd:3}},
-        {name:'Éclaireur', atk:3, hp:10, skill:{name:'Flèche double', mult:2.2, maxCd:2}},
-        {name:'Traqueur', atk:4, hp:5, skill:{name:'Lame d’ombre', mult:2.3, maxCd:3}}
-    ]
+    Guerrier:makeSpecs('Guerrier','heavy',
+        ['Berserker','Templier','Maître d’armes','Brise-ligne','Légionnaire'],
+        ['Rage sanglante','Jugement','Assaut','Percée','Ultimatum']
+    ),
+    Mage:makeSpecs('Mage','burst',
+        ['Pyromancien','Cryomancien','Sorcier astral','Évocateur','Archimage'],
+        ['Explosion','Gel profond','Nova','Cataclysme','Singularité']
+    ),
+    Archer:makeSpecs('Archer','ranged',
+        ['Sniper','Rôdeur','Chasseur d’élite','Faucon','Sage-vent'],
+        ['Tir perforant','Salve','Volée','Barrage','Tempête']
+    ),
+    Seigneur:makeSpecs('Seigneur','tank',
+        ['Suzerain','Régent','Souverain','Conquérant','Titan du trône'],
+        ['Marteau d’honneur','Déferlante','Coup d’éclat','Brisure','Apothéose']
+    ),
+    Roi:makeSpecs('Roi','balanced',
+        ['Roi-chevalier','Monarque d’acier','Roi solaire','Roi céleste','Roi immortel'],
+        ['Ordre royal','Lame du trône','Couronne ardente','Zénith','Décret ultime']
+    ),
+    Dresseur:makeSpecs('Dresseur','balanced',
+        ['Meneur','Dominateur','Alpha','Seigneur des bêtes','Mythe animal'],
+        ['Morsure coordonnée','Meute','Ravage','Totem sauvage','Apogée']
+    ),
+    Druide:makeSpecs('Druide','heavy',
+        ['Gardien des bois','Héraut des saisons','Sage sylvestre','Oracle des forêts','Avatar naturel'],
+        ['Épines','Givre floral','Tempête racinaire','Cycle ancien','Équinoxe']
+    ),
+    Assassin:makeSpecs('Assassin','burst',
+        ['Lame noire','Silencieux','Nuit rouge','Spectre','Exécuteur'],
+        ['Coup létal','Saignée','Finisseurs','Linceul','Mort instantanée']
+    )
 };
 function renderSpecialization(){
+    currentMenu = 'specialization';
     const m = document.getElementById('menu');
     if(player.level < 10){
-        m.innerHTML = `<h3>⚔️ Spécialisation</h3><div class="small">Disponible au niveau 10.</div>`;
+        m.innerHTML = `<h3>⚔️ Spécialisation</h3><div class="small">Disponible au niveau 10 (puis plus d’options aux niveaux 15 et 20).</div>`;
         return;
     }
     if(player.specialization){
@@ -1419,7 +2052,9 @@ function renderSpecialization(){
     const list = SPECIALIZATIONS[player.class] || [];
     m.innerHTML = `<h3>⚔️ Spécialisation</h3>`;
     list.forEach((s,i)=>{
-        m.innerHTML += `<button class="item-btn" onclick="chooseSpecialization(${i})">${s.name} (+${s.atk} ATK, +${s.hp} PV)</button>`;
+        const locked = player.level < s.level;
+        const label = locked ? `${s.name} (Nv ${s.level})` : s.name;
+        m.innerHTML += `<button class="item-btn" ${locked?'disabled':''} onclick="chooseSpecialization(${i})">${label} (+${s.atk} ATK, +${s.hp} PV)</button>`;
     });
 }
 function chooseSpecialization(i){
@@ -1427,6 +2062,7 @@ function chooseSpecialization(i){
     const list = SPECIALIZATIONS[player.class] || [];
     const s = list[i];
     if(!s) return;
+    if(player.level < (s.level || 10)) return;
     player.specialization = s;
     player.skill.name = s.skill.name;
     player.skill.mult = s.skill.mult;
@@ -1443,6 +2079,7 @@ const COMPANIONS = [
     {name:'Golem de pierre', atk:5, price:80}
 ];
 function renderCompanion(){
+    currentMenu = 'companion';
     const m = document.getElementById('menu');
     if(player.companion){
         m.innerHTML = `<h3>🐾 Compagnon</h3>
@@ -1467,6 +2104,7 @@ function recruitCompanion(i){
 
 // ===== FORGE =====
 function renderForge(){
+    currentMenu = 'forge';
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>⚒️ Forge</h3>
         <div class="small">Enchanter une pièce équipée (coût: 2 Fragment cristallin + 20 or)</div>`;
@@ -1480,12 +2118,16 @@ function renderForge(){
     slots.forEach(s=>{
         const item = player.equipment[s.slot];
         if(!item) return;
-        m.innerHTML += `<button class="item-btn" onclick="enchantItem('${s.slot}')">${s.label}: ${item.name}</button>`;
+        m.innerHTML += `<div class="talent-row">
+            <div class="small">${s.label}: ${item.name}</div>
+            <button class="item-btn" data-no-hover="1" onclick="enchantItem('${s.slot}')">Améliorer</button>
+        </div>`;
     });
 }
 
 // ===== ARTEFACTS =====
 function renderArtifacts(){
+    currentMenu = 'artifacts';
     const m = document.getElementById('menu');
     const icons = {
         'Totem du Chef':'🗿',
@@ -1504,37 +2146,17 @@ function renderArtifacts(){
         if(a.lifesteal) parts.push(`+${Math.round(a.lifesteal*100)}% vol de vie`);
         return parts.length ? parts.join(', ') : 'Aucun bonus';
     }
-    const all = []
-        .concat(player.inventory.weapons, player.inventory.armors, player.inventory.helmets, player.inventory.rings, player.inventory.amulets)
-        .filter(it=>it.rarity==='Légendaire');
-    const equipped = Object.values(player.equipment).filter(it=>it && it.rarity==='Légendaire');
+    const equippedLabel = player.artifact ? `${player.artifact.name} (${artifactStats(player.artifact)})` : 'Aucun';
     m.innerHTML = `<h3>✨ Artefacts</h3>
-        <div class="small">Équipés: ${equipped.length}</div>
-        <div class="small">Inventaire: ${all.length}</div>
-        <div class="small">Artefact unique: ${player.artifact ? player.artifact.name : 'Aucun'}</div>`;
+        <div class="small">Équipé: ${equippedLabel}</div>
+        <div class="small">Uniques: ${player.artifacts.length}</div>`;
     if(player.artifacts.length){
-        m.innerHTML += `<div class="small">Artefacts uniques:</div>`;
         player.artifacts.forEach((a,i)=>{
             const icon = icons[a.name] || '✨';
-            m.innerHTML += `<button class="item-btn" onclick="equipArtifact(${i})">${icon} Équiper ${a.name}</button>
-                <div class="small">${a.desc || ''} ${artifactStats(a)}</div>`;
+            m.innerHTML += `<button class="item-btn" onclick="equipArtifact(${i})">${icon} ${a.name}</button>
+                <div class="small">${artifactStats(a)}</div>`;
         });
-    }
-    if(equipped.length){
-        m.innerHTML += `<div class="small">Équipés:</div>`;
-        equipped.forEach(it=>{
-            const stat = it.atk?`+${it.atk} ATK`:(it.def?`+${it.def} DEF`:`+${it.hp} PV`);
-            m.innerHTML += `<div class="small">★ ${it.name} (${stat})</div>`;
-        });
-    }
-    if(all.length){
-        m.innerHTML += `<div class="small">Inventaire:</div>`;
-        all.forEach(it=>{
-            const stat = it.atk?`+${it.atk} ATK`:(it.def?`+${it.def} DEF`:`+${it.hp} PV`);
-            m.innerHTML += `<div class="small">★ ${it.name} (${stat})</div>`;
-        });
-    }
-    if(!equipped.length && !all.length){
+    } else {
         m.innerHTML += `<div class="small">Aucun artefact pour le moment.</div>`;
     }
 }
@@ -1575,6 +2197,7 @@ const TALENTS = {
     luck:{name:'Chance', desc:'+2% loot par point', max:10}
 };
 function renderTalents(){
+    currentMenu = 'talents';
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>✨ Talents</h3>
         <div class="small">Points disponibles: ${player.talentPoints}</div>`;
@@ -1582,8 +2205,10 @@ function renderTalents(){
         const val = player.talents[key] || 0;
         const can = player.talentPoints > 0 && val < t.max;
         m.innerHTML += `
-            <div class="small">${t.name}: ${val}/${t.max} — ${t.desc}</div>
-            <button class="item-btn" ${can?'':'disabled'} onclick="upgradeTalent('${key}')">Améliorer</button>`;
+            <div class="talent-row">
+                <div class="small">${t.name}: ${val}/${t.max} — ${t.desc}</div>
+                <button class="item-btn" data-no-hover="1" ${can?'':'disabled'} onclick="upgradeTalent('${key}')">Améliorer</button>
+            </div>`;
     });
 }
 function upgradeTalent(key){
@@ -1611,6 +2236,7 @@ const FACTION_NPCS = {
     Chasseurs:{name:'Doran le Traqueur', line:'Je lis les traces comme un livre.'}
 };
 function renderNPC(){
+    currentMenu = 'npc';
     const m = document.getElementById('menu');
     const npc = NPCS[Math.floor(Math.random()*NPCS.length)];
     const factionList = [
@@ -1623,10 +2249,22 @@ function renderNPC(){
         <div class="small">Contacts de factions:</div>
         ${factionList.map(f=>`<div class="small"><b>${FACTION_NPCS[f.name].name}:</b> ${f.line}</div>`).join('')}
         <div class="small">Actions de factions:</div>
-        ${factionList.map(f=>`<button class="item-btn" onclick="npcFaction('${f.name}')">${f.name}</button>`).join('')}
-        <button class="item-btn" onclick="npcRumor()">Demander une rumeur</button>
-        <button class="item-btn" onclick="npcHeal()">Bénédiction (10 or)</button>
-        <button class="item-btn" onclick="npcQuest()">Nouvelle quête</button>`;
+        ${factionList.map(f=>`<div class="talent-row">
+            <div class="small">${f.name}</div>
+            <button class="item-btn" data-no-hover="1" onclick="npcFaction('${f.name}')">Voir</button>
+        </div>`).join('')}
+        <div class="talent-row">
+            <div class="small">Rumeur</div>
+            <button class="item-btn" data-no-hover="1" onclick="npcRumor()">Demander</button>
+        </div>
+        <div class="talent-row">
+            <div class="small">Bénédiction (10 or)</div>
+            <button class="item-btn" data-no-hover="1" onclick="npcHeal()">Recevoir</button>
+        </div>
+        <div class="talent-row">
+            <div class="small">Nouvelle quête</div>
+            <button class="item-btn" data-no-hover="1" onclick="npcQuest()">Obtenir</button>
+        </div>`;
 }
 function npcRumor(){
     const hints = [
@@ -1672,6 +2310,7 @@ function npcFaction(name){
 
 // ===== SHOP =====
 function renderShop(){
+    currentMenu = 'shop';
     const m = document.getElementById('menu');
     m.innerHTML = `<h3>🏪 Marchand</h3>
         <div class="small">Or: ${player.gold}</div>`;
@@ -1814,9 +2453,11 @@ function scoreItem(it, slot){
 let statsOpen=false;
 function showStats(){
     if(!classChosen){return;}
-    statsOpen=!statsOpen;
+    toggleMenu('stats', renderStatsMenu);
+}
+function renderStatsMenu(){
+    currentMenu = 'stats';
     const m=document.getElementById('menu');
-    if(!statsOpen){m.innerHTML='';return;}
     const hpPercent=player.hp/player.maxHp*100;
     const xpPercent=player.xp/(player.level*XP_PER_LEVEL)*100;
     m.innerHTML=`<div class="stats-menu">
@@ -1839,24 +2480,25 @@ function showStats(){
 
 // ===== ACTIONS =====
 document.getElementById('actions').innerHTML=
- `<button class="primary-action" onclick="attack()">Attaquer</button>
-   <button class="primary-action" onclick="useSkill()">Compétence</button>
-   <button class="primary-action" onclick="potion()">Potion</button>
-   <button onclick="toggleInventory()">Inventaire</button>
-   <button onclick="toggleEquipment()">Équipement</button>
-   <button onclick="showStats()">Stats</button>
+`<button id="btnAttack" class="primary-action btn-combat btn-lg" onclick="attack()">⚔️ Attaquer</button>
+ <button id="btnSkill" class="primary-action btn-combat btn-lg" onclick="useSkill()">✨ Compétence</button>
+ <button id="btnPotion" class="primary-action btn-combat btn-lg" onclick="potion()">🧪 Potion</button>
+ <button id="btnInventory" class="btn-util btn-md" onclick="toggleInventory()">🎒 Inventaire</button>
+ <button id="btnEquipment" class="btn-util btn-md" onclick="toggleEquipment()">🛡️ Équipement</button>
+ <button id="btnStats" class="btn-util btn-md" onclick="showStats()">📊 Stats</button>
+ <button id="btnMenuMain" class="btn-menu btn-md" onclick="toggleSecondary()">➕ Menu</button>
   `;
 
 buildSecondaryActions();
 
 document.getElementById('dungeonActions').innerHTML=
-`<button onclick="dungeonAttack()">Attaquer</button>
- <button onclick="dungeonSkill()">Compétence</button>
- <button onclick="dungeonPotion()">Potion</button>
- <button onclick="solvePuzzle()">Énigme</button>
- <button onclick="disarmTrap()">Désamorcer</button>
- <button onclick="nextRoom()">Salle suivante</button>
- <button onclick="exitDungeon()">Quitter</button>`;
+`<button class="btn-combat btn-md" onclick="dungeonAttack()">⚔️ Attaquer</button>
+ <button class="btn-combat btn-md" onclick="dungeonSkill()">✨ Compétence</button>
+ <button class="btn-combat btn-md" onclick="dungeonPotion()">🧪 Potion</button>
+ <button class="btn-util btn-sm" onclick="solvePuzzle()">🧩 Énigme</button>
+ <button class="btn-util btn-sm" onclick="disarmTrap()">🛠️ Désamorcer</button>
+ <button class="btn-util btn-sm" onclick="nextRoom()">➡️ Salle</button>
+ <button class="btn-menu btn-sm" onclick="exitDungeon()">⏏️ Quitter</button>`;
 
 function setActionsEnabled(enabled){
     const actions = document.getElementById('actions');
@@ -1879,28 +2521,50 @@ function toggleSecondary(){
     s.style.display = show ? 'flex' : 'none';
 }
 
+function updateActionVisibility(){
+    const inVillage = currentZone && currentZone.id === 'village';
+    const attackBtn = document.getElementById('btnAttack');
+    const skillBtn = document.getElementById('btnSkill');
+    const potionBtn = document.getElementById('btnPotion');
+    const invBtn = document.getElementById('btnInventory');
+    const equipBtn = document.getElementById('btnEquipment');
+    const statsBtn = document.getElementById('btnStats');
+    const menuBtn = document.getElementById('btnMenuMain');
+    const dungeonBtn = document.querySelector('button[onclick="enterDungeon()"]');
+    const show = !inVillage;
+    if(attackBtn) attackBtn.style.display = show ? '' : 'none';
+    if(skillBtn) skillBtn.style.display = show ? '' : 'none';
+    if(potionBtn) potionBtn.style.display = show ? '' : 'none';
+    if(dungeonBtn) dungeonBtn.style.display = show ? '' : 'none';
+    if(invBtn) invBtn.style.display = '';
+    if(equipBtn) equipBtn.style.display = '';
+    if(statsBtn) statsBtn.style.display = '';
+    if(menuBtn) menuBtn.style.display = '';
+}
+
 function buildSecondaryActions(){
     const s = document.getElementById('secondaryActions');
     if(!s) return;
     const inVillage = currentZone && currentZone.id === 'village';
     let html = `
-    <div class="action-label">Exploration</div>
-    <button onclick="fightZoneBoss()">Boss de zone</button>
-    <button onclick="startArena()">Arène</button>
-    <button onclick="renderQuestMenu()">Quêtes</button>
+    ${inVillage ? '' : `<div class="action-label">Exploration</div>
+    <button class="btn-combat btn-sm" onclick="fightZoneBoss()">👑 Boss</button>
+    <button class="btn-combat btn-sm" onclick="fightWorldBoss()">🌌 Boss mondial</button>
+    <button class="btn-combat btn-sm" onclick="startArena()">🏟️ Arène</button>
+    <button class="btn-util btn-sm" onclick="toggleMenu('quests', renderQuestMenu)">📜 Quêtes</button>`}
     <div class="action-label">Personnage</div>
-    <button onclick="renderTalents()">Talents</button>
-    <button onclick="renderSpecialization()">Spécialisation</button>`;
+    <button class="btn-util btn-sm" onclick="toggleMenu('talents', renderTalents)">✨ Talents</button>
+    <button class="btn-util btn-sm" onclick="toggleMenu('specialization', renderSpecialization)">⚔️ Spé</button>`;
     if(inVillage){
         html += `
         <div class="action-label">Services du Village</div>
-        <button onclick="renderShop()">Marchand</button>
-        <button onclick="renderForge()">Forge</button>
-        <button onclick="renderCrafting()">Artisanat</button>
-        <button onclick="renderCompanion()">Compagnon</button>
-        <button onclick="renderArtifacts()">Artefacts</button>
-        <button onclick="renderUpgrade()">Amélioration</button>
-        <button onclick="renderConsumables()">Consommables</button>`;
+        <button class="btn-service btn-sm" onclick="toggleMenu('shop', renderShop)">🏪 Marchand</button>
+        <button class="btn-service btn-sm" onclick="toggleMenu('forge', renderForge)">⚒️ Forge</button>
+        <button class="btn-service btn-sm" onclick="toggleMenu('crafting', renderCrafting)">🛠️ Artisanat</button>
+        <button class="btn-service btn-sm" onclick="toggleMenu('companion', renderCompanion)">🐾 Compagnon</button>
+        <button class="btn-service btn-sm" onclick="toggleMenu('artifacts', renderArtifacts)">✨ Artefacts</button>
+        <button class="btn-service btn-sm" onclick="toggleMenu('upgrade', renderUpgrade)">⬆️ Amélioration</button>
+        <button class="btn-service btn-sm" onclick="toggleMenu('consumables', renderConsumables)">🧴 Consommables</button>`;
     } else {
         html += `
         <div class="action-label">Services (au Village)</div>
@@ -1908,10 +2572,10 @@ function buildSecondaryActions(){
     }
     html += `
     <div class="action-label">Social</div>
-    <button onclick="renderNPC()">PNJ</button>
-    <button onclick="renderFactions()">Factions</button>
-    <button onclick="renderBestiary()">Bestiaire</button>
-    <button onclick="renderAchievements()">Succès</button>`;
+    <button class="btn-social btn-sm" onclick="toggleMenu('npc', renderNPC)">🗣️ PNJ</button>
+    <button class="btn-social btn-sm" onclick="toggleMenu('factions', renderFactions)">🏛️ Factions</button>
+    <button class="btn-social btn-sm" onclick="toggleMenu('bestiary', renderBestiary)">📖 Bestiaire</button>
+    <button class="btn-social btn-sm" onclick="toggleMenu('achievements', renderAchievements)">🏅 Succès</button>`;
     s.innerHTML = html;
 }
 
@@ -2123,19 +2787,11 @@ function startArena(){
 
 // ===== INIT CLASS CHOICE =====
 function chooseClass(){
-    const classes = [
-        {name:'Guerrier', hp:60, atk:8, def:3, skill:{name:'Coup puissant', mult:2, cooldown:0, maxCd:3}},
-        {name:'Mage', hp:40, atk:12, def:1, skill:{name:'Boule de feu', mult:2.5, cooldown:0, maxCd:3}},
-        {name:'Archer', hp:50, atk:10, def:2, skill:{name:'Tir rapide', mult:1.8, cooldown:0, maxCd:2}}
-    ];
+    const classes = getClassDefs();
     const classScreen = document.getElementById('classScreen');
     const cards = classes.map((c,i)=>{
-        const role = c.name==='Guerrier' ? 'Tank brutal' : c.name==='Mage' ? 'Dégâts magiques' : 'DPS mobile';
-        const desc = c.name==='Guerrier'
-            ? 'Encaisse fort et frappe au corps à corps.'
-            : c.name==='Mage'
-            ? 'Gros dégâts à distance, fragile.'
-            : 'Rapide et précis, bon équilibre.';
+        const role = c.role || '';
+        const desc = c.desc || '';
         return `
         <div class="class-card">
             <div class="class-tag">${role}</div>
@@ -2150,10 +2806,13 @@ function chooseClass(){
         </div>`;
     }).join('');
     classScreen.innerHTML = `
-        <div class="class-modal">
-            <h2 class="class-title">Choisis ta classe</h2>
-            <p class="class-sub">Ton destin se scelle ici. Tu pourras changer plus tard, mais commence fort.</p>
-            <div class="class-grid">${cards}</div>
+        <div class="modal-wrap">
+            <div class="modal-glow"></div>
+            <div class="class-modal">
+                <h2 class="class-title">Choisis ta classe</h2>
+                <p class="class-sub">Ton destin se scelle ici. Tu pourras changer plus tard, mais commence fort.</p>
+                <div class="class-grid">${cards}</div>
+            </div>
         </div>`;
     classScreen.style.display = 'flex';
     requestAnimationFrame(()=>classScreen.classList.add('show'));
@@ -2184,21 +2843,27 @@ function chooseDifficulty(){
     const difficulties = [
         {id:'facile', name:'Facile', desc:'Ennemis plus faibles, progression plus douce.', enemyMult:0.85, lootBonus:0},
         {id:'normal', name:'Normal', desc:'Équilibré pour tous les styles.', enemyMult:1, lootBonus:0},
-        {id:'difficile', name:'Difficile', desc:'Ennemis coriaces, meilleures récompenses.', enemyMult:1.25, lootBonus:0.08}
+        {id:'difficile', name:'Difficile', desc:'Ennemis coriaces, meilleures récompenses.', enemyMult:1.25, lootBonus:0.08},
+        {id:'cauchemar', name:'Cauchemar', desc:'Très exigeant, réservée aux joueurs aguerris.', enemyMult:1.5, lootBonus:0.12},
+        {id:'infernal', name:'Infernal', desc:'Punitive, erreurs mortelles.', enemyMult:1.8, lootBonus:0.18},
+        {id:'impossible', name:'Impossible (1 vie)', desc:'Une seule vie. La mort est définitive.', enemyMult:2.2, lootBonus:0.25, oneLife:true}
     ];
     const screen = document.getElementById('difficultyScreen');
     const cards = difficulties.map((d)=>`
         <div class="difficulty-card">
             <h3>${d.name}</h3>
             <p>${d.desc}</p>
-            <button class="difficulty-pick" onclick="setDifficulty('${d.id}')">Choisir ${d.name}</button>
+            <button class="difficulty-pick" onclick="confirmDifficulty('${d.id}')">Choisir ${d.name}</button>
         </div>
     `).join('');
     screen.innerHTML = `
-        <div class="difficulty-modal">
-            <h2 class="difficulty-title">Choisis la difficulté</h2>
-            <p class="difficulty-sub">Tu pourras la changer plus tard dans une future option.</p>
-            <div class="difficulty-grid">${cards}</div>
+        <div class="modal-wrap">
+            <div class="modal-glow"></div>
+            <div class="difficulty-modal">
+                <h2 class="difficulty-title">Choisis la difficulté</h2>
+                <p class="difficulty-sub">Tu pourras la changer plus tard dans une future option.</p>
+                <div class="difficulty-grid">${cards}</div>
+            </div>
         </div>`;
     screen.style.display = 'flex';
     requestAnimationFrame(()=>screen.classList.add('show'));
@@ -2214,7 +2879,10 @@ function setDifficulty(id){
     const map = {
         facile:{id:'facile', name:'Facile', enemyMult:0.85, lootBonus:0},
         normal:{id:'normal', name:'Normal', enemyMult:1, lootBonus:0},
-        difficile:{id:'difficile', name:'Difficile', enemyMult:1.25, lootBonus:0.08}
+        difficile:{id:'difficile', name:'Difficile', enemyMult:1.25, lootBonus:0.08},
+        cauchemar:{id:'cauchemar', name:'Cauchemar', enemyMult:1.5, lootBonus:0.12},
+        infernal:{id:'infernal', name:'Infernal', enemyMult:1.8, lootBonus:0.18},
+        impossible:{id:'impossible', name:'Impossible (1 vie)', enemyMult:2.2, lootBonus:0.25, oneLife:true}
     };
     difficulty = map[id] || map.normal;
     const screen = document.getElementById('difficultyScreen');
@@ -2224,6 +2892,46 @@ function setDifficulty(id){
     document.getElementById('mapBoard').style.display = '';
     showMobilePanels();
     chooseClass();
+}
+
+function confirmDifficulty(id){
+    if(id !== 'impossible'){
+        setDifficulty(id);
+        return;
+    }
+    const screen = document.getElementById('confirmScreen');
+    if(!screen){
+        setDifficulty(id);
+        return;
+    }
+    screen.innerHTML = `
+        <div class="confirm-modal-wrap">
+            <div class="confirm-glow"></div>
+            <div class="confirm-modal">
+                <h2 class="confirm-title">Mode Impossible</h2>
+                <p class="confirm-sub">Une seule vie. La mort supprime la sauvegarde.</p>
+                <div class="confirm-warn">Tu acceptes un défi extrême. Es-tu sûr de continuer ?</div>
+                <div class="confirm-actions">
+                    <button class="confirm-btn secondary" onclick="closeConfirm()">Retour</button>
+                    <button class="confirm-btn" onclick="acceptImpossible()">Continuer</button>
+                </div>
+            </div>
+        </div>`;
+    screen.style.display = 'flex';
+    requestAnimationFrame(()=>screen.classList.add('show'));
+}
+
+function closeConfirm(){
+    const screen = document.getElementById('confirmScreen');
+    if(!screen) return;
+    screen.classList.remove('show');
+    screen.style.display = 'none';
+    screen.innerHTML = '';
+}
+
+function acceptImpossible(){
+    closeConfirm();
+    setDifficulty('impossible');
 }
 function renderZoneMap(){
     const map = document.getElementById('zoneMap');
@@ -2283,11 +2991,7 @@ function fightZoneBoss(){
     updateUI();
 }
 function setClass(i){
-    const classes = [
-        {name:'Guerrier', hp:60, atk:8, def:3, skill:{name:'Coup puissant', mult:2, cooldown:0, maxCd:3}},
-        {name:'Mage', hp:40, atk:12, def:1, skill:{name:'Boule de feu', mult:2.5, cooldown:0, maxCd:3}},
-        {name:'Archer', hp:50, atk:10, def:2, skill:{name:'Tir rapide', mult:1.8, cooldown:0, maxCd:2}}
-    ];
+    const classes = getClassDefs();
     const c = classes[i];
     player.class = c.name;
     player.hp = c.hp; player.maxHp = c.hp; player.atk = c.atk;
@@ -2313,16 +3017,19 @@ function showStartMenu(){
     const loadLabel = lastSave ? `Charger une partie (${lastSave})` : 'Charger une partie';
     const loadDisabled = lastSave ? '' : 'disabled';
     startScreen.innerHTML = `
-        <div class="start-modal">
-            <h2 class="start-title">Donjon & Quêtes</h2>
-            <p class="start-sub">Choisis ton destin et pars à l’aventure.</p>
-            <div class="start-actions">
-                <button class="start-btn" onclick="startNewGame()">Nouvelle partie</button>
-                <button class="start-btn secondary" ${loadDisabled} onclick="loadGame()">${loadLabel}</button>
-                <button class="start-btn secondary" onclick="openOptions()">Options</button>
+        <div class="modal-wrap">
+            <div class="modal-glow"></div>
+            <div class="start-modal">
+                <h2 class="start-title">Donjon & Quêtes</h2>
+                <p class="start-sub">Choisis ton destin et pars à l’aventure.</p>
+                <div class="start-actions">
+                    <button class="start-btn" onclick="startNewGame()">Nouvelle partie</button>
+                    <button class="start-btn secondary" ${loadDisabled} onclick="loadGame()">${loadLabel}</button>
+                    <button class="start-btn secondary" onclick="openOptions()">Options</button>
+                </div>
+                ${lastSave ? `<div class="start-save">Dernière sauvegarde : ${lastSave}</div>` : ''}
+                <div class="start-hint">Conseil : commence par une classe adaptée à ton style.</div>
             </div>
-            ${lastSave ? `<div class="start-save">Dernière sauvegarde : ${lastSave}</div>` : ''}
-            <div class="start-hint">Conseil : commence par une classe adaptée à ton style.</div>
         </div>`;
     startScreen.style.display = 'flex';
     document.getElementById('questBoard').style.display = 'none';
@@ -2358,6 +3065,7 @@ function loadGame(){
     if(!('artifact' in player)) player.artifact = null;
     if(!('artifacts' in player)) player.artifacts = [];
     if(!('defeatedBosses' in player)) player.defeatedBosses = [];
+    if(!('debuffs' in player)) player.debuffs = [];
     difficulty = data.difficulty || difficulty;
     questLevel = data.questLevel || 1;
     if(Array.isArray(data.quests)){
@@ -2423,7 +3131,8 @@ function resetNewGame(){
         companion:null,
         artifact:null,
         artifacts:[],
-        defeatedBosses:[]
+        defeatedBosses:[],
+        debuffs:[]
     };
     questLevel = 1;
     initQuests(3);
@@ -2439,6 +3148,8 @@ function resetNewGame(){
     weeklyQuest = null;
     bestiary = {};
     achievements = {};
+    worldBoss = null;
+    worldBossPhase = 0;
     initSeasonalEvent();
     initDailyWeekly();
     saveGame();
@@ -2447,36 +3158,39 @@ function resetNewGame(){
 function openOptions(){
     const optionsScreen = document.getElementById('optionsScreen');
     optionsScreen.innerHTML = `
-        <div class="options-modal">
-            <h2 class="options-title">Options</h2>
-            <div class="options-grid">
-                <div class="opt-row">
-                    <label>Musique</label>
-                    <input id="optMusic" type="range" min="0" max="100" value="${settings.music}">
+        <div class="modal-wrap">
+            <div class="modal-glow"></div>
+            <div class="options-modal">
+                <h2 class="options-title">Options</h2>
+                <div class="options-grid">
+                    <div class="opt-row">
+                        <label>Musique</label>
+                        <input id="optMusic" type="range" min="0" max="100" value="${settings.music}">
+                    </div>
+                    <div class="opt-row">
+                        <label>SFX</label>
+                        <input id="optSfx" type="range" min="0" max="100" value="${settings.sfx}">
+                    </div>
+                    <div class="opt-row">
+                        <label>Vitesse des animations</label>
+                        <select id="optAnim">
+                            <option value="0.8">Rapide</option>
+                            <option value="1">Normal</option>
+                            <option value="1.3">Lent</option>
+                        </select>
+                    </div>
+                    <div class="opt-row">
+                        <label>Textes flottants</label>
+                        <select id="optFloat">
+                            <option value="1">Activés</option>
+                            <option value="0">Désactivés</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="opt-row">
-                    <label>SFX</label>
-                    <input id="optSfx" type="range" min="0" max="100" value="${settings.sfx}">
+                <div class="opt-actions">
+                    <button class="opt-btn" onclick="saveOptions()">Sauvegarder</button>
+                    <button class="opt-btn secondary" onclick="closeOptions()">Retour</button>
                 </div>
-                <div class="opt-row">
-                    <label>Vitesse des animations</label>
-                    <select id="optAnim">
-                        <option value="0.8">Rapide</option>
-                        <option value="1">Normal</option>
-                        <option value="1.3">Lent</option>
-                    </select>
-                </div>
-                <div class="opt-row">
-                    <label>Textes flottants</label>
-                    <select id="optFloat">
-                        <option value="1">Activés</option>
-                        <option value="0">Désactivés</option>
-                    </select>
-                </div>
-            </div>
-            <div class="opt-actions">
-                <button class="opt-btn" onclick="saveOptions()">Sauvegarder</button>
-                <button class="opt-btn secondary" onclick="closeOptions()">Retour</button>
             </div>
         </div>`;
     optionsScreen.style.display = 'flex';
@@ -2593,10 +3307,8 @@ function computeRespawnBonus(){
 function fullResetWithBonus(){
     if(!classChosen) return;
     respawnBonus = computeRespawnBonus();
-    const classBase =
-        player.class==='Guerrier' ? {hp:60, atk:8} :
-        player.class==='Mage' ? {hp:40, atk:12} :
-        {hp:50, atk:10};
+    const baseDef = getClassDefs().find(c=>c.name===player.class) || {hp:50, atk:10};
+    const classBase = {hp:baseDef.hp, atk:baseDef.atk};
     player.level = 1;
     player.xp = 0;
     player.maxHp = classBase.hp + respawnBonus.hp;
@@ -2611,6 +3323,7 @@ function fullResetWithBonus(){
     player.artifact = null;
     player.artifacts = [];
     player.defeatedBosses = [];
+    player.debuffs = [];
     factions = {Explorateurs:0, Arcanes:0, Chasseurs:0};
     player.equipment = {weapon:null, armor:null, helmet:null, ring:null, amulet:null};
     player.inventory = {weapons:[], armors:[], helmets:[], rings:[], amulets:[], drops:[]};
@@ -2638,6 +3351,7 @@ loadSettings();
 initSeasonalEvent();
 initDailyWeekly();
 showStartMenu();
+initHoverInfo();
 </script>
 </body>
 </html>
