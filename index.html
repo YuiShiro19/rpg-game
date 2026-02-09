@@ -130,7 +130,22 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
     #actions button{font-size:15px}
     #secondaryActions button{font-size:14px}
     .emoji{font-size:0.95em}
-    #mobilePanels{display:flex}
+    #mobilePanels{
+        display:flex;
+        position:fixed;
+        left:12px;
+        right:12px;
+        bottom:12px;
+        gap:8px;
+        padding:8px;
+        background:rgba(10,10,16,0.92);
+        border:1px solid #2b2338;
+        border-radius:14px;
+        z-index:1000;
+        justify-content:space-between;
+    }
+    #mobilePanels button{flex:1}
+    body{padding-bottom:90px}
     #questBoard,#mapBoard{display:none}
     #questBoard.show,#mapBoard.show{display:block}
     #zoneMap .zone{padding:12px 14px;gap:6px;font-size:16px}
@@ -150,8 +165,10 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
 <div id="toast"></div>
 
 <div id="mobilePanels">
+  <button id="btnCombatPanel" class="panel-btn back" onclick="closeMobilePanels()">⚔️ Combat</button>
   <button id="btnQuestPanel" class="panel-btn quest" onclick="toggleMobilePanel('quest')"><span class="emoji">📜</span> Quêtes</button>
   <button id="btnMapPanel" class="panel-btn map" onclick="toggleMobilePanel('map')"><span class="emoji">🗺️</span> Carte</button>
+  <button id="btnMenuPanel" class="panel-btn back" onclick="toggleSecondary()">➕ Menu</button>
   <button id="btnBackPanel" class="panel-btn back" style="display:none" onclick="closeMobilePanels()">⬅️ Retour</button>
 </div>
 
