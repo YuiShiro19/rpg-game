@@ -128,6 +128,11 @@ button:hover{transform:scale(1.08);box-shadow:0 0 25px #ff5b9f}
     #mobilePanels{display:flex}
     #questBoard,#mapBoard{display:none}
     #questBoard.show,#mapBoard.show{display:block}
+    #zoneMap .zone{padding:12px 14px;gap:6px;font-size:16px}
+    #zoneMap .zone .sub{font-size:13px}
+    #zoneMap .zone .bar{height:8px}
+    #questList .quest{padding:12px}
+    .quest-card,.list-card{padding:12px}
 }
 </style>
 </head>
@@ -2077,6 +2082,7 @@ function chooseDifficulty(){
     document.getElementById('questBoard').style.display = 'none';
     document.getElementById('game').style.display = 'none';
     document.getElementById('dungeonUI').style.display = 'none';
+    document.getElementById('mapBoard').style.display = 'none';
     setActionsEnabled(false);
 }
 
@@ -2091,6 +2097,7 @@ function setDifficulty(id){
     screen.classList.remove('show');
     screen.style.display = 'none';
     screen.innerHTML = '';
+    document.getElementById('mapBoard').style.display = '';
     chooseClass();
 }
 function renderZoneMap(){
