@@ -6,8 +6,8 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Space+Grotesk:wght@400;500;600&display=swap');
 body{margin:0;background:radial-gradient(1200px 600px at 15% 10%,rgba(127,0,255,0.25),transparent 60%),radial-gradient(900px 600px at 85% 20%,rgba(0,255,213,0.2),transparent 60%),#08060d;color:#eee;font-family:"Space Grotesk", sans-serif;display:flex;justify-content:center;align-items:flex-start;padding:20px;gap:20px}
-#questBoard{width:260px;position:sticky;top:20px}
-#mapBoard{width:260px;position:sticky;top:20px}
+#questBoard{width:260px;position:sticky;top:20px;display:block}
+#mapBoard{width:260px;position:sticky;top:20px;display:block}
 #mobilePanels{display:none;width:100%;gap:10px;justify-content:center}
 #mobilePanels button{padding:8px 12px;font-size:14px;border-radius:10px;background:#1a1424;border:1px solid #2b2338;box-shadow:none}
 #mobilePanels button.active{background:linear-gradient(90deg,#00ffd5,#7f00ff);border:none;color:#0b0b12}
@@ -2038,10 +2038,12 @@ function toggleMobilePanel(which){
     map.classList.toggle('show', showMap);
     questBtn.classList.toggle('active', showQuest);
     mapBtn.classList.toggle('active', showMap);
-    if(showQuest || showMap){
-        setMainVisibility(false);
-    } else {
-        setMainVisibility(true);
+    if(window.matchMedia('(max-width: 720px)').matches){
+        if(showQuest || showMap){
+            setMainVisibility(false);
+        } else {
+            setMainVisibility(true);
+        }
     }
 }
 
