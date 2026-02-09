@@ -237,6 +237,9 @@ let dailyQuest = null;
 let weeklyQuest = null;
 let difficulty = {id:'normal', name:'Normal', enemyMult:1, lootBonus:0};
 const zones = [
+    {id:'village', name:'Village', diff:0, rewardMult:0, reqLevel:1, safe:true, monsters:[
+        {name:'Rat des ruelles',hp:10,atk:2}
+    ], boss:null},
     {id:'plaine', name:'Plaine', diff:1, rewardMult:1, reqLevel:1, monsters:[
         {name:'Gobelin',hp:28,atk:6},
         {name:'Loup',hp:26,atk:8},
@@ -273,7 +276,10 @@ const zones = [
         {name:'Briseur d’âmes',hp:86,atk:28}
     ], boss:{name:'Seigneur des abysses', hp:180, atk:28, lore:'Il dévore les âmes tombées.', artifact:{id:'void-heart', name:'Cœur du Néant', atk:6, hp:20, lifesteal:0.08, desc:'Puissance et vol de vie.'}}}
 ];
-let currentZone = zones[0];
+function getDefaultZone(){
+    return zones.find(z=>z.id==='plaine') || zones[0];
+}
+let currentZone = getDefaultZone();
 
 // ===== UTILS =====
 const MONSTER_SPRITES = {
@@ -492,7 +498,9 @@ function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
 
 // ===== ENEMIES =====
 function initEnemy(level=1, type='normal'){
-    const monsters = currentZone.monsters;
+    const monsters = (currentZone.monsters && currentZone.monsters.length)
+        ? currentZone.monsters
+        : (zones.find(z=>z.monsters && z.monsters.length && !z.safe)?.monsters || [{name:'Rat',hp:10,atk:2}]);
     const bosses=[
         {name:'Démon corrompu',hp:85,atk:16},
         {name:'Seigneur Squelette',hp:80,atk:15},
@@ -875,12 +883,23 @@ function updateUI(){
         </div>`;
     document.getElementById('hpBar').style.width=clamp(player.hp/maxHpTotal*100,0,100)+'%';
     document.getElementById('xpBar').style.width=clamp(player.xp/(player.level*XP_PER_LEVEL)*100,0,100)+'%';
-    const aff = enemy.affix ? ` (${enemy.affix.name})` : '';
-    document.getElementById('monsterStats').innerHTML=`👹 ${enemy.name}${aff} HP: ${enemy.hp}/${enemy.maxHp}`;
-    document.getElementById('monsterHpBar').style.width=clamp(enemy.hp/enemy.maxHp*100,0,100)+'%';
-    setMonsterImage('monsterImg', enemy.name);
+    const monsterContainer = document.getElementById('monsterContainer');
+    if(currentZone.safe){
+        if(monsterContainer) monsterContainer.style.display = 'none';
+        document.getElementById('monsterHpBar').style.width='0%';
+    } else {
+        if(!enemy) enemy = initEnemy(player.level);
+        if(monsterContainer) monsterContainer.style.display = 'block';
+        const aff = enemy.affix ? ` (${enemy.affix.name})` : '';
+        document.getElementById('monsterStats').innerHTML=`👹 ${enemy.name}${aff} HP: ${enemy.hp}/${enemy.maxHp}`;
+        document.getElementById('monsterHpBar').style.width=clamp(enemy.hp/enemy.maxHp*100,0,100)+'%';
+        const img = document.getElementById('monsterImg');
+        if(img) img.style.display = 'block';
+        setMonsterImage('monsterImg', enemy.name);
+    }
     renderQuestBoard();
     renderZoneMap();
+    buildSecondaryActions();
     checkAchievements();
 }
 function updateDungeonUI(){
@@ -910,6 +929,8 @@ function updateDungeonUI(){
 
 // ===== COMBAT (MONDE) =====
 function attack(){
+    if(currentZone.safe){log('🏠 Le Village est une zone sûre.');return;}
+    if(!enemy) return;
     if(player.hp<=0)return;
     const dmg=Math.floor(Math.random()*4)+getAtk();
     enemy.hp-=dmg;
@@ -920,6 +941,8 @@ function attack(){
     enemyTurn(false);
 }
 function useSkill(){
+    if(currentZone.safe){log('🏠 Le Village est une zone sûre.');return;}
+    if(!enemy) return;
     if(player.skill.cooldown>0){log('⏳ Compétence en recharge');return;}
     const dmg=Math.floor(getAtk()*player.skill.mult);
     enemy.hp-=dmg;
@@ -1800,27 +1823,7 @@ document.getElementById('actions').innerHTML=
  <button onclick="showStats()">Stats</button>
  <button onclick="toggleSecondary()">Menu+</button>`;
 
-document.getElementById('secondaryActions').innerHTML=
-`<div class="action-label">Exploration</div>
- <button onclick="fightZoneBoss()">Boss de zone</button>
- <button onclick="startArena()">Arène</button>
- <button onclick="renderQuestMenu()">Quêtes</button>
- <div class="action-label">Personnage</div>
- <button onclick="renderTalents()">Talents</button>
- <button onclick="renderSpecialization()">Spécialisation</button>
- <button onclick="renderCompanion()">Compagnon</button>
- <button onclick="renderArtifacts()">Artefacts</button>
- <div class="action-label">Services</div>
- <button onclick="renderShop()">Marchand</button>
- <button onclick="renderForge()">Forge</button>
- <button onclick="renderCrafting()">Artisanat</button>
- <button onclick="renderUpgrade()">Amélioration</button>
- <button onclick="renderConsumables()">Consommables</button>
- <div class="action-label">Social</div>
- <button onclick="renderNPC()">PNJ</button>
- <button onclick="renderFactions()">Factions</button>
- <button onclick="renderBestiary()">Bestiaire</button>
- <button onclick="renderAchievements()">Succès</button>`;
+buildSecondaryActions();
 
 document.getElementById('dungeonActions').innerHTML=
 `<button onclick="dungeonAttack()">Attaquer</button>
@@ -1850,6 +1853,42 @@ function toggleSecondary(){
     if(!s) return;
     const show = s.classList.toggle('show');
     s.style.display = show ? 'flex' : 'none';
+}
+
+function buildSecondaryActions(){
+    const s = document.getElementById('secondaryActions');
+    if(!s) return;
+    const inVillage = currentZone && currentZone.id === 'village';
+    let html = `
+    <div class="action-label">Exploration</div>
+    <button onclick="fightZoneBoss()">Boss de zone</button>
+    <button onclick="startArena()">Arène</button>
+    <button onclick="renderQuestMenu()">Quêtes</button>
+    <div class="action-label">Personnage</div>
+    <button onclick="renderTalents()">Talents</button>
+    <button onclick="renderSpecialization()">Spécialisation</button>`;
+    if(inVillage){
+        html += `
+        <div class="action-label">Services du Village</div>
+        <button onclick="renderShop()">Marchand</button>
+        <button onclick="renderForge()">Forge</button>
+        <button onclick="renderCrafting()">Artisanat</button>
+        <button onclick="renderCompanion()">Compagnon</button>
+        <button onclick="renderArtifacts()">Artefacts</button>
+        <button onclick="renderUpgrade()">Amélioration</button>
+        <button onclick="renderConsumables()">Consommables</button>`;
+    } else {
+        html += `
+        <div class="action-label">Services (au Village)</div>
+        <div class="small">Va au Village pour accéder aux services.</div>`;
+    }
+    html += `
+    <div class="action-label">Social</div>
+    <button onclick="renderNPC()">PNJ</button>
+    <button onclick="renderFactions()">Factions</button>
+    <button onclick="renderBestiary()">Bestiaire</button>
+    <button onclick="renderAchievements()">Succès</button>`;
+    s.innerHTML = html;
 }
 
 // ===== DONJON =====
@@ -2149,9 +2188,13 @@ function renderZoneMap(){
         const active = z.id===currentZone.id ? 'active' : '';
         const defeated = z.boss && player.defeatedBosses.includes(z.boss.name);
         const mark = defeated ? ' ✅' : '';
-        const label = locked ? `${z.name} (Nv ${z.reqLevel})${mark}` : `${z.name} (★${z.diff})${mark}`;
-        const sub = locked ? `Progression ${Math.min(player.level, z.reqLevel)}/${z.reqLevel}` : `Récompenses x${z.rewardMult}`;
-        const pct = locked ? Math.min(100, Math.floor((player.level / z.reqLevel) * 100)) : 100;
+        const label = z.safe
+            ? `${z.name} (Sûr)${mark}`
+            : (locked ? `${z.name} (Nv ${z.reqLevel})${mark}` : `${z.name} (★${z.diff})${mark}`);
+        const sub = z.safe
+            ? 'Services et repos'
+            : (locked ? `Progression ${Math.min(player.level, z.reqLevel)}/${z.reqLevel}` : `Récompenses x${z.rewardMult}`);
+        const pct = z.safe ? 100 : (locked ? Math.min(100, Math.floor((player.level / z.reqLevel) * 100)) : 100);
         return `<button class="zone ${active} ${locked?'locked':''}" ${locked?'disabled':''} onclick="selectZone('${z.id}')">
             <div>${label}</div>
             <div class="sub">${sub}</div>
@@ -2164,7 +2207,7 @@ function selectZone(id){
     if(!z) return;
     if(player.level < z.reqLevel) return;
     currentZone = z;
-    enemy = initEnemy(player.level);
+    enemy = z.safe ? null : initEnemy(player.level);
     updateUI();
     saveGame();
 }
@@ -2292,7 +2335,7 @@ function loadGame(){
     bestiary = data.bestiary || {};
     achievements = data.achievements || {};
     initDailyWeekly();
-    currentZone = zones.find(z=>z.id===data.currentZoneId) || zones[0];
+    currentZone = zones.find(z=>z.id===data.currentZoneId) || getDefaultZone();
     classChosen = data.classChosen;
     respawnBonus = data.respawnBonus || {hp:0, atk:0, potions:0, label:''};
     if(classChosen){
@@ -2303,7 +2346,7 @@ function loadGame(){
         document.getElementById('questBoard').style.display = '';
         document.getElementById('game').style.display = '';
         setActionsEnabled(true);
-        enemy = initEnemy(player.level);
+        enemy = currentZone.safe ? null : initEnemy(player.level);
         updateUI();
     } else {
         const startScreen = document.getElementById('startScreen');
@@ -2334,8 +2377,8 @@ function resetNewGame(){
     };
     questLevel = 1;
     initQuests(3);
-    currentZone = zones[0];
-    enemy = initEnemy(1);
+    currentZone = getDefaultZone();
+    enemy = currentZone.safe ? null : initEnemy(1);
     dungeon = {level:1, rooms:[], current:0};
     inDungeon = false;
     inArena = false;
